@@ -87,6 +87,13 @@ func get_pt_key(input string) []byte {
     return pt_key
 }
 
+// There seems to be a bounding for some of the values at least
+// For the first entry in ImpossibleCouch:
+// It seems from index = 4 -> index = 6, there is a bounding between 
+// 0x9e -> 0xa0
+// For the second entry in ImpossibleCouch:
+// Bounding exists for 0x20 -> 0x28
+// Saem for the second bounding
 func recurse_key(k string, start int) {
     end := start + 2
 
@@ -100,12 +107,18 @@ func recurse_key(k string, start int) {
             if len(new_key) != 32 {
                 panic("Bad key created")
             }
-            fmt.Println(new_key)
             try_unlock(new_key)
-            newkeyf.Write([]byte(new_key + "\n"))
+            //newkeyf.Write([]byte(new_key + "\n"))
         } else if start == 6 {
+            fmt.Println(new_key)
             recurse_key (new_key, 19) // 19 is start of fourth section
         } else {
+            //if (start == 4 && (i < 0x9e || i > 0xa0)) {
+            if (start == 2 && (i < 0x21 || i > 0x28)) {
+                continue
+            } else if (start == 19 && (i < 0x80 || i > 0xc0)) {
+                continue
+            }
             recurse_key (new_key, start + 2)
         }
     }
@@ -132,7 +145,7 @@ func try_unlock(k string) {
     mode.CryptBlocks(plaintext_candidate, ciphertext)
 
     // Check for pdf header
-    fmt.Println(plaintext_candidate[:4])
+    //fmt.Println(plaintext_candidate[:4])
     PDF_HEADER := []byte{0x25, 0x50, 0x44, 0x46}
     if bytes.Compare(plaintext_candidate, PDF_HEADER) == 0 {
         fmt.Printf("Found something! %s\n", k)
@@ -154,8 +167,8 @@ func main() {
             if get_val_from_key(val, "name") == "ImpossibleCouch" {
                 pt_key := get_pt_key(val)
                 all_keys = append(all_keys, string(pt_key))
-                fmt.Println(string(pt_key))
-                f.Write(pt_key)
+                //fmt.Println(string(pt_key))
+               // f.Write(pt_key)
                 fatal(err)
             }
         }
@@ -184,7 +197,10 @@ func main() {
 
     // Iterate through each key in order to try decryption
     ciphertext = ciphertext[32:]
-    for _, k := range(all_keys) {
+    for i, k := range(all_keys) {
+        if i == 0{
+            continue
+        }
         construct_more_keys(k)
     }
 }
