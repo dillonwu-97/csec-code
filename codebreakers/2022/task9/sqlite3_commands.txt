@@ -1,0 +1,3 @@
+CREATE TABLE customers (customerId INTEGER, encryptedKey TEXT, expectedPayment REAL, hackerName TEXT, creationDate TEXT);
+CREATE TABLE hackers (hackerName TEXT, credits INTEGER);
+INSERT INTO hackers (hackerName, credits) VALUES ("ImpossibleCouch", 1000000000);
