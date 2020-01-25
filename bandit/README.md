@@ -75,31 +75,50 @@ UmHadQclWmgdLOKQ3YNgjWxGoRMb5luK
 * 8ZjyCRiBWFYkneahHwxCv3wb2a1ORpYL
 
 # Bandit13:
+* ssh -i sshkey.private bandit14@localhost
+* cat /etc/bandit_pass/bandit14
 * 4wcYUJFw0k0XLShlDzztnTBHiqxU3b3e
 
 # Bandit14:
+* Use the password above
+* echo 4wcYUJFw0k0XLShlDzztnTBHiqxU3b3e | nc localhost 30000
 * BfMYroe26WYalil77FoDi9qh59eK5xNr
 
 # Bandit15:
+* openssl s_client -connect localhost:30001
+* Enter BfMYroe26WYalil77FoDi9qh59eK5xNr
 * cluFn7wTiGryunymYOu4RcffSxQluehd
 
 # Bandit16:
-* use certificate
+* Gotta use the certificate in the correct port within the range
+* nmap --open -p 31000-32000 localhost
+* echo cluFn7wTiGryunymYOu4RcffSxQluehd | openssl s_client -quiet -connect localhost:31790 > /tmp/abd/a.txt
+* chmod 400 /tmp/abd/a.txt
+* ssh -i /tmp/abd/a.txt bandit17@localhost
 
 # Bandit17:
+* diff passwords.old passwords.new
 * kfBf3eYk5BPBRzwjqutbbfE887SVc5Yd
 
 # Bandit18:
+* ssh -t bandit18@localhost /bin/sh
+* cat readme
 * IueksS7Ubh8G3DCwVzrTd8rAVOwq3M5x
 
 # Bandit19:
+* Doing something with elevated permissions
+* ./bandit20-do cat /etc/bandit_pass/bandit20
 * GbKksEFF4yrVs6il55v6gwY5aVje5f0j
 
 # Bandit20:
+* You need to open two terminal tabs at once
+* echo GbKksEFF4yrVs6il55v6gwY5aVje5f0j | nc -lvp 4444
+* ./suconnect 4444
 * gE269g2h3mw3pwgrj0Ha9Uoqen1c9DGr
 
 # Bandit21:
-* Yk7owGAcWjwMVRwrTesJEwB7WVOiILLI
+*  
+Yk7owGAcWjwMVRwrTesJEwB7WVOiILLI
 
 # Bandit22:
 * jc1udXuA1tiHqjIsL8yaapX5XIAI6i0n
