@@ -23,27 +23,41 @@ UmHadQclWmgdLOKQ3YNgjWxGoRMb5luK
 * koReBOKuIDDepwhWk7jZC0RTdopnAYKh
 
 # Bandit5
+* Use built-in Linux search mechanisms
+* find inhere -type f -size 1033c ! -executable -readable inhere/maybehere07/.file2
 * DXjZPULLxYr17uwoI01bNLQbtFemEgo7
 
 # Bandit6: 
+* Similar idea as bandit5 plus a little extra work
+* find ./ -group bandit6 -user bandit7 -size 33c 2>&1 | grep -v 'Permission'
 * HKBPTKQnIay4Fw76bEy8PVxKEDQRKTzs
 
 # Bandit7: 
+* find "millionth"
+* cat data.txt | grep -e "millionth"
 * cvX2JJa4CFALtqS87jk27qwqGhBM9plV
 
 # Bandit8: 
+* sort data.txt | uniq -u
 * UsvVyFSfZZWbi6wgC7dAFyFuR6jQQUhR
 
 # Bandit9: 
+* strings data.txt | grep -e "=="
 * truKLdjsbJ5g7yyJ2X2R0o3a5HQJFuLk
 
 # Bandit10: 
+* base64 -d data.txt | cat
 * IFukwKGsFW8MOq3IRFqrxE1hxTNEbUPR
 
 # Bandit11:
+* cat data.txt | tr a-zA-z n-za-mN-ZA-M
 * 5Te8Y4drgCRfCx8ugdwuEX8KFC6k2EUu
 
 # Bandit12:
+* For this one, the basic idea is that you have to repeatedly decompress files
+mkdir /tmp/xyz
+cp /home/bandit12/data.txt /tmp/xyz
+xxd -r data.txt > data
 * 8ZjyCRiBWFYkneahHwxCv3wb2a1ORpYL
 
 # Bandit13:
