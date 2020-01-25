@@ -55,9 +55,11 @@ UmHadQclWmgdLOKQ3YNgjWxGoRMb5luK
 
 # Bandit12:
 * For this one, the basic idea is that you have to repeatedly decompress files
-mkdir /tmp/xyz
-cp /home/bandit12/data.txt /tmp/xyz
-xxd -r data.txt > data
+>
+* mkdir /tmp/xyz
+* cp /home/bandit12/data.txt /tmp/xyz
+* xxd -r data.txt > data
+* 
 * 8ZjyCRiBWFYkneahHwxCv3wb2a1ORpYL
 
 # Bandit13:
