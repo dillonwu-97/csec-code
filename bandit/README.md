@@ -54,12 +54,24 @@ UmHadQclWmgdLOKQ3YNgjWxGoRMb5luK
 * 5Te8Y4drgCRfCx8ugdwuEX8KFC6k2EUu
 
 # Bandit12:
-* For this one, the basic idea is that you have to repeatedly decompress files
->
+* For this one, the basic idea is that you have to repeatedly decompress files; It's a long one so strap in
 * mkdir /tmp/xyz
 * cp /home/bandit12/data.txt /tmp/xyz
 * xxd -r data.txt > data
-* 
+* mv data a.gz
+* gzip -d a.gz
+* mv a a.bz2
+* bzip2 -d a.bz2
+* mv a a.gz
+* gzip -d a.gz
+* mv a a.tar
+* tar xvf a.tar
+* tar xvf data5.bin
+* bzip2 -d data6.bin
+* tar xvf data6.bin.out
+* mv data8.bin data8.gz
+* gzip -d data8.gz
+* cat data8 
 * 8ZjyCRiBWFYkneahHwxCv3wb2a1ORpYL
 
 # Bandit13:
