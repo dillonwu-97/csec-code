@@ -117,13 +117,29 @@ UmHadQclWmgdLOKQ3YNgjWxGoRMb5luK
 * gE269g2h3mw3pwgrj0Ha9Uoqen1c9DGr
 
 # Bandit21:
-*  
-Yk7owGAcWjwMVRwrTesJEwB7WVOiILLI
+* cron is a time-based scheduler so it runs programs periodically
+* cd /etc/cron.d/
+* cat cronjob_bandit22
+* cat /usr/bin/cronjob_bandit22.sh
+* cat /tmp/t7O6lds9S0RqQh9aMcz6ShpAoZKF7fgv
+* Yk7owGAcWjwMVRwrTesJEwB7WVOiILLI
 
 # Bandit22:
+* Same directory as above
+* cat cronjob_bandiit23
+* cat /usr/bin/cronjob_bandit23.sh
+* echo I am user bandit23 | md5sum | cut -d ' ' -f 1
+* cat /tmp/8ca319486bfbbc3663ea0fbe81326349
 * jc1udXuA1tiHqjIsL8yaapX5XIAI6i0n
 
 # Bandit23:
+* Same technique as above
+* Script is:
+''' 
+#!/bin/bash
+cat /etc/bandit_pass/bandit24 > tmp/lmn/lmn
+'''
+* cat /tmp/lmn/lmn
 * UoMYTrfrBFHyQXmg6gzctqAwOmw1IohZ
 
 # Bandit24:
