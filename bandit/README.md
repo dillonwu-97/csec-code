@@ -135,10 +135,10 @@ UmHadQclWmgdLOKQ3YNgjWxGoRMb5luK
 # Bandit23:
 * Same technique as above
 * Script is:
-''' 
+``` 
 #!/bin/bash
 cat /etc/bandit_pass/bandit24 > tmp/lmn/lmn
-'''
+```
 * cat /tmp/lmn/lmn
 * UoMYTrfrBFHyQXmg6gzctqAwOmw1IohZ
 
