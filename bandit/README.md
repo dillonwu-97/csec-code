@@ -13,7 +13,7 @@ cat "spaces in this filename"
 UmHadQclWmgdLOKQ3YNgjWxGoRMb5luK
 
 # Bandit3
-> Idea is to find the hidden file
+* Idea is to find the hidden file
 > cat ./inhere/.hidden
 > pIwrPrtPN36QITSp3EQaw936yaFoFgAB
 
