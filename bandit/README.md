@@ -133,32 +133,59 @@ UmHadQclWmgdLOKQ3YNgjWxGoRMb5luK
 * jc1udXuA1tiHqjIsL8yaapX5XIAI6i0n
 
 # Bandit23:
-* Same technique as above
-* Script is:
+* Same technique as above; move the script file **with permissions** to /var/spool/bandit24 so that it can be run
+* For example, the script I used was:
 ``` 
 #!/bin/bash
 cat /etc/bandit_pass/bandit24 > tmp/lmn/lmn
 ```
-* cat /tmp/lmn/lmn
 * UoMYTrfrBFHyQXmg6gzctqAwOmw1IohZ
 
 # Bandit24:
+* Made another simple script to find the password
+* ./hut.sh | nc -v localhost 30002
+* hut.sh:
+```
+#!/bin/bash
+for i in {0000..9999}
+do
+  echo "UoMYTrfrBFHyQXmg6gzctqAwOmw1IohZ $i"
+done
+```
 * uNG9O58gUE7snukf3bvZ0rxhtnjzSGzG
 
 # Bandit25:
-* 5czgV9L3Xx8JPOyRbXh6lQbmIOWvPT6Z
+* ssh -i bandit26.sshkey bandit26@localhost
 
 # Bandit26:
-* 3ba3118a22e93127a4ed485be72ef5ea
+* V hard this one was; make the terminal as small as possible so that you can write commands in vi
+* Press v to start vi
+* VI COMMAND:e /etc/bandit_pass/bandit26
+* 5czgV9L3Xx8JPOyRbXh6lQbmIOWvPT6Z <-- password to get INTO bandit26, not bandit27; this is so you can access bandit26 w/o bandit25
+* Running vi /etc/passwd in Bandit25 shows that bandit26 is not using /bin/bash so we need to set shell to be /bin/bash
+* VI COMMAND:set shell=/bin/bash
+* VI COMMAND:sh
+* ./bandit27-do cat /etc/bandit_pass/bandit27
+* 3ba3118a22e93127a4ed485be72ef5ea <-- password for bandit27
 
 # Bandit27:
+* gitception
+* git clone ssh://bandit27-git@localhost/home/bandit27-git/repo /tmp/atlanta
+* Read the README.md
 * 0ef186ac70e04ea33b4c1853d2526fa2
 
 # Bandit28:
+* git clone ssh://bandit28-git@localhost/home/bandit28-git/repo /tmp/atl
+* cd .git
+* git log -p
 * bbc96594b4e001778eee9975372716b2
 
 # Bandit29:
+* git clone ssh://bandit29-git@localhost/home/bandit29-git/repo /tmp/atl
+* cd .git
+* git log --all
+* git reset --hard 33ce2e95d9c5d6fb0a40e5ee9a2926903646b4e3
+* Read the README
 * 5b90576bedb2cc04c86a9e924ce42faf
 
-# Bandit30:
-*
+
