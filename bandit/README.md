@@ -187,6 +187,3 @@ done
 * git reset --hard 33ce2e95d9c5d6fb0a40e5ee9a2926903646b4e3
 * Read the README
 * 5b90576bedb2cc04c86a9e924ce42faf 
-
-
-natas1
