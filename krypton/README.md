@@ -9,6 +9,7 @@
 * LEVEL TWO PASSWORD ROTTEN
 
 # Krypton2
+* just look at how A-Z is encrypted
 * echo OMQEMDUEQMEK | tr 'M-ZA-L' 'A-Z'
 * CAESARISEASY
 
