@@ -15,3 +15,7 @@
 * [website]/robots.txt
 * [website]/s3cr3t/
 * Z9tkRkWmpt9Qr7XrR5jWRkgOU901swEZ
+
+# Natas4
+* curl -H "Referer: http://natas5.natas.labs.overthewire.org/" -u natas4:Z9tkRkWmpt9Qr7XrR5jWRkgOU901swEZ http://natas4.natas.labs.overthewire.org/
+* iX6IOfmpN7AYOQGPwtn3fXpbaJVJcHfq
