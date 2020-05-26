@@ -23,3 +23,4 @@
 # Natas5
 * Saw that there was cookie called loggedin that was set to 0
 * Opened up console and did document.cookie="loggedin=1"
+* aGoY4q2Dc6MgDq4oL4YtoKtyAg9PeHa1
