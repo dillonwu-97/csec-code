@@ -24,3 +24,9 @@
 * Saw that there was cookie called loggedin that was set to 0
 * Opened up console and did document.cookie="loggedin=1"
 * aGoY4q2Dc6MgDq4oL4YtoKtyAg9PeHa1
+
+# Natas 6
+* Saw that there was an "includes/secrets.inc" file
+* Visited http://natas6.natas.labs.overthewire.org/includes/secret.inc 
+* Saw that the secret is FOEIUWGHFEEUHOFUOIU
+* 7z3hEENjQtflzgnT29q7wAvMNfZdh0i9
