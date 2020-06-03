@@ -25,8 +25,20 @@
 * Opened up console and did document.cookie="loggedin=1"
 * aGoY4q2Dc6MgDq4oL4YtoKtyAg9PeHa1
 
-# Natas 6
+# Natas6
 * Saw that there was an "includes/secrets.inc" file
 * Visited http://natas6.natas.labs.overthewire.org/includes/secret.inc 
 * Saw that the secret is FOEIUWGHFEEUHOFUOIU
 * 7z3hEENjQtflzgnT29q7wAvMNfZdh0i9
+
+# Natas7
+* http://natas7.natas.labs.overthewire.org/index.php?page=/etc/natas_webpass/natas8
+* DBfUBfqQG69KvJvJ1iAbMoIpwSNQ9bWe
+
+# Natas8
+* Used hex2bin php command on 3d3d516343746d4d6d6c315669563362
+* Got the value b3ViV1lmMmtCcQ==, and then reversed it
+* Got oubWYf2kBq as the decoded base 64 value
+* W0mMhUcRRnG8dcghE4qvk3JA9lGt8nDl
+
+# Natas9
