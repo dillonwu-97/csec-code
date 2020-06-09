@@ -1,0 +1,5 @@
+# Methodology
+* nc readme.ctfcompetition.com 1337
+* iconv README file
+* flag: CTF{4ll_D474_5h4ll_B3_Fr33}
+

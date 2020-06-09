@@ -1,0 +1,3 @@
+# Methodology
+* Repeatedly update direction and tokens
+* flag: CTF{Who_is_Tardis_Ormandy}

