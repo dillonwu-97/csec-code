@@ -1,0 +1,8 @@
+# Methodology:
+* Easiest way was to do strings rand2
+# Another method was to understand the code
+* look at functions with gdb (info functions)
+* there is one called next_destination
+* write the C code for the function and return the values
+* learned the second method from https://github.com/Dvd848/CTFs/blob/master/2019_GoogleCTF_BQ/Enter_Space_Time_Coordinates.md
+* flag: CTF{welcome_to_googlectf}
