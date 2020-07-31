@@ -51,4 +51,6 @@
 * U82q5TCMMQ9xuFoI3dYX61s7OZD9JKoK
 
 # Natas11
+* Look at code snippet in Natas11 folder
+* EDXp0pS26wLKHZy1rDBPUZk0RKfLGIR3
 
