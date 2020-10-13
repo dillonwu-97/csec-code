@@ -1,6 +1,0 @@
-Methodology:
-* printing out the top of the stack showed the important information
-* the idea is that you xor-ed palindromic primes with the given values to get an ascii value
-* a list of palindromic primes can be found in this link: https://charlesreid1.com/wiki/Palindromic_Primes
-* link: http://emoji-t0anaxnr3nacpt4na.web.ctfcompetition.com/humans_and_cauliflowers_network/amber.html
-* flag: CTF{Peace_from_Cauli!}
