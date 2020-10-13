@@ -1,2 +1,3 @@
-hit you widdat ddu-du ddu-du du  
-Please don't look if you don't want spoilers! This repo is just for me to record my solutions in an easily retrievable format. 
+# Cybersecurity Writeups Code Portion
+This repo contains the nontrival code written for the writeups found on this site: https://dillonwu-97.github.io/csec-writeups/.  
+The writeups on the site also contains links to their respective code snippets.
