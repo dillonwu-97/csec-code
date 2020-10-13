@@ -34,4 +34,3 @@ $data = json_encode(array( "showpassword"=>"yes", "bgcolor"=>"#ffffff"));
 // echo xor_encrypt(base64_decode('ClVLIh4ASCsCBE8lAxMacFMZV2hdVVotEhhUJQNVAmhSEV4sFxFeaAw='));
 echo base64_encode(xor_encrypt2($data));
 
-  
