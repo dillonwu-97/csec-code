@@ -1,7 +1,0 @@
-# Methodology
-* found the p,q, and d value the encryption
-* brute force possibilites
-* use extended gcd algorithm to calculate d
-* took the msg to d power, modulo n to calculate unencrypted values 
-* flag: CTF{017d72f0b513e89830bccf5a36306ad944085a47}
-
