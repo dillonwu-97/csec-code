@@ -1,4 +1,0 @@
-# Methodology
-* mounted the ntfs file and then went to Documents
-* used the command getfattr to get extended file attributes of file with extension --only-values
-* flag: CTF{congratsyoufoundmycreds}
