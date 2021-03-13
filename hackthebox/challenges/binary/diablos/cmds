@@ -1,0 +1,6 @@
+b vuln
+b flag
+b *0x080492af
+b *0x0804925f 
+display $ebp
+display $ebp+4
