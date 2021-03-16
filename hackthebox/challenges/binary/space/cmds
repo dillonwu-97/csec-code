@@ -1,0 +1,6 @@
+b *0x08049231
+b *0x080491de
+b *0x80491cd
+display $ebp
+display $esp
+b *0x080491a4
