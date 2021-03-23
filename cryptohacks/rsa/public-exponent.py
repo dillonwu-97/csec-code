@@ -103,7 +103,12 @@ def everything_is_still_big():
 	# Wiener attack no longer works
 	# d = owiener.attack(e, N)
 	# print(d)
-	print(N-1)
+	# print('./RsaCtfTool.py --createpub ./pk.txt -n %d -e %d' % (N, e))
+	# print('./RsaCtfTool.py --publickey ./pk.txt --private')
+	d = '00:E0:ED:BE:73:3C:B4:43:32:4E:C0:63:3A:56:FB:CC:19:EE:15:DA:46:F7:5F:91:90:26:2C:58:D1:DF:A3:9C:CB:C5:DD:EC:CA:39:B2:EA:69:9F:16:2C:CD:41:C3:1A:15:A3:01:5C:EE:D5:38:D6:A7:C0:F3:ED:2F:63:22:05:35'
+	d = d.lower().replace(':','')
+	d = int(d,16)
+	return trans(pow(c, d, N))
 
 	
 def endless_emails():
@@ -205,8 +210,8 @@ def main():
 	# print("modulus inutilis solution: ", modulus_inutilis())
 	# print("everything is big solution: ", everything_is_big())
 	# print("crossed_wires solution: ", crossed_wires())
-	# print("everything is still big solution: ", everything_is_still_big())
-	print("endless emails solution: ", endless_emails())
+	print("everything is still big solution: ", everything_is_still_big())
+	# print("endless emails solution: ", endless_emails())
 
 if __name__ == '__main__':
 	main()
