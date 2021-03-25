@@ -72,93 +72,96 @@ def lemur_xor():
 def main():
 
 	### Solutions: Encoding
+	print('--- ENCODING ---')
 	# 1
-	# a = [99, 114, 121, 112, 116, 111, 123, 65, 83, 67, 73, 73, 95, 112, 114, 49, 110, 116, 52, 98, 108, 51, 125]
-	# sol_1 = "".join([chr(i) for i in a])
-	# print(sol_1)
+	a = [99, 114, 121, 112, 116, 111, 123, 65, 83, 67, 73, 73, 95, 112, 114, 49, 110, 116, 52, 98, 108, 51, 125]
+	sol_1 = "".join([chr(i) for i in a])
+	print(sol_1)
 
 	# 2
-	# b = '63727970746f7b596f755f77696c6c5f62655f776f726b696e675f776974685f6865785f737472696e67735f615f6c6f747d'
-	# print(bytes.fromhex(b).decode('ascii'))
+	b = '63727970746f7b596f755f77696c6c5f62655f776f726b696e675f776974685f6865785f737472696e67735f615f6c6f747d'
+	print(bytes.fromhex(b).decode('ascii'))
 
 	# 3
-	# c = '72bca9b68fc16ac7beeb8f849dca1d8a783e8acf9679bf9269f7bf'
-	# print(base64.b64encode(bytes.fromhex(c)).decode('ascii'))
+	c = '72bca9b68fc16ac7beeb8f849dca1d8a783e8acf9679bf9269f7bf'
+	print(base64.b64encode(bytes.fromhex(c)).decode('ascii'))
 
 	# 4
-	# d = 11515195063862318899931685488813747395775516287289682636499965282714637259206269
-	# print(long_to_bytes(d).decode('ascii'))
+	d = 11515195063862318899931685488813747395775516287289682636499965282714637259206269
+	print(long_to_bytes(d).decode('ascii'))
 
 	# encoding_challenge()
 
 	### Solutions: XOR
-	# # 1
-	# a = "label"
-	# b = 13
-	# c = ""
-	# for i in a:
-	# 	c += chr(b ^ ord(i))
-	# print("crypto{" + c + "}")
+	print('--- XOR ---')
+	# 1
+	a = "label"
+	b = 13
+	c = ""
+	for i in a:
+		c += chr(b ^ ord(i))
+	print("crypto{" + c + "}")
 
-	# #2 
-	# KEY1 = 0xa6c8b6733c9b22de7bc0253266a3867df55acde8635e19c73313
-	# KEY2KEY1 = 0x37dcb292030faa90d07eec17e3b1c6d8daf94c35d4c9191a5e1e
-	# KEY2KEY3 = 0xc1545756687e7573db23aa1c3452a098b71a7fbf0fddddde5fc1
-	# FLAGKEY1KEY3KEY2 = 0x04ee9855208a2cd59091d04767ae47963170d1660df7f56f5faf
-	# res = FLAGKEY1KEY3KEY2 ^ KEY2KEY3 ^ KEY1
-	# print(dec(res))
+	#2 
+	KEY1 = 0xa6c8b6733c9b22de7bc0253266a3867df55acde8635e19c73313
+	KEY2KEY1 = 0x37dcb292030faa90d07eec17e3b1c6d8daf94c35d4c9191a5e1e
+	KEY2KEY3 = 0xc1545756687e7573db23aa1c3452a098b71a7fbf0fddddde5fc1
+	FLAGKEY1KEY3KEY2 = 0x04ee9855208a2cd59091d04767ae47963170d1660df7f56f5faf
+	res = FLAGKEY1KEY3KEY2 ^ KEY2KEY3 ^ KEY1
+	print(dec(res))
 
-	# #3 
-	# a = hex(0x73626960647f6b206821204f21254f7d694f7624662065622127234f726927756d)
-	# for i in range(128):	
-	# 	current = ''
-	# 	for j in range(2, len(a), 2):
-	# 		current += chr(int(a[j:j+2], 16) ^ i)
-	# 	if current.find("crypto") != -1:
-	# 		print(current)
-	# 		break
+	#3 
+	a = hex(0x73626960647f6b206821204f21254f7d694f7624662065622127234f726927756d)
+	for i in range(128):	
+		current = ''
+		for j in range(2, len(a), 2):
+			current += chr(int(a[j:j+2], 16) ^ i)
+		if current.find("crypto") != -1:
+			print(current)
+			break
 		
-	# #4
-	# a = '0' + hex(0x0e0b213f26041e480b26217f27342e175d0e070a3c5b103e2526217f27342e175d0e077e263451150104)[2:]
-	# start = "crypto{1"
-	# keys = []
-	# for i in range(len(start)):
-	# 	# print(a[2*i:2*i + 2], start[i])
-	# 	keys.append( ord(start[i]) ^ int( a[2*i:2*i + 2], 16) )
-	# ret = ""
-	# # print(keys)
-	# for i in range(0, len(a),2):
-	# 	ret += chr( keys[(i//2)%len(keys)] ^ int( a[i: i + 2], 16 ))
-	# print(ret)
+	#4
+	a = '0' + hex(0x0e0b213f26041e480b26217f27342e175d0e070a3c5b103e2526217f27342e175d0e077e263451150104)[2:]
+	start = "crypto{1"
+	keys = []
+	for i in range(len(start)):
+		# print(a[2*i:2*i + 2], start[i])
+		keys.append( ord(start[i]) ^ int( a[2*i:2*i + 2], 16) )
+	ret = ""
+	# print(keys)
+	for i in range(0, len(a),2):
+		ret += chr( keys[(i//2)%len(keys)] ^ int( a[i: i + 2], 16 ))
+	print(ret)
 
 	#5
-	# lemur_xor()
+	lemur_xor()
 
+	print('--- MATH ---')
+	# Math
+	# 1
+	a = 66528
+	b = 52920
+	print(gmpy2.gcd(a, b))
 
-	# # Math
-	# # 1
-	# a = 66528
-	# b = 52920
-	# print(gmpy2.gcd(a, b))
+	# 2
+	p = 26513
+	q = 32321
+	res = base_solution_linear(1,p,q)
+	# x, y = symbols("x, y")
+	# print(diophantine(p*x + q*y - 1))
+	print("crypto{" + str(res[0]) + "," + str(res[1]) + "}")
 
-	# # 2
-	# p = 26513
-	# q = 32321
-	# res = base_solution_linear(1,p,q)
-	# # x, y = symbols("x, y")
-	# # print(diophantine(p*x + q*y - 1))
-	# print("crypto{" + str(res[0]) + "," + str(res[1]) + "}")
+	# 3
+	print(8146798528947 %17)
 
-	# # 3
-	# print(8146798528947 %17)
+	# 4
+	print(pow(273246787654,65536,65537))
 
-	# # 4
-	# print(pow(273246787654,65536,65537))
-
-	# # 5
-	# print(gmpy2.invert(3, 13))
+	# 5
+	print(gmpy2.invert(3, 13))
 
 	# Data Formats
+	print('--- DATA FORMATS ---')
 	# https://www.cryptologie.net/article/260/asn1-vs-der-vs-pem-vs-x509-vs-pkcs7-vs/
 	# private key:
 	# 	-----BEGIN RSA PRIVATE KEY-----
@@ -193,25 +196,18 @@ def main():
 	# d = int(d.replace(":", "").lower(),16)
 	# print(d)
 
-	# # 1
-	# f = open('/Users/Kvothe/Downloads/privacy_enhanced_mail_1f696c053d76a78c2c531bb013a92d4a.pem','r')
-	# key = RSA.importKey(f.read())
-	# print(key.d)
+	# 1
+	f = open('/Users/Kvothe/Downloads/privacy_enhanced_mail_1f696c053d76a78c2c531bb013a92d4a.pem','r')
+	key = RSA.importKey(f.read())
+	print(key.d)
 
-	# # 2
-	# f = open('/Users/Kvothe/Downloads/2048b-rsa-example-cert_3220bd92e30015fe4fbeb84a755e7ca5.der', 'rb')
-	# cert = Certificate.load(f.read())
+	# 2
+	f = open('/Users/Kvothe/Downloads/2048b-rsa-example-cert_3220bd92e30015fe4fbeb84a755e7ca5.der', 'rb')
+	cert = Certificate.load(f.read())
 
-	# n = cert.public_key.native["public_key"]["modulus"]
+	n = cert.public_key.native["public_key"]["modulus"]
 
-	# print(n)
-
-	# # 3
-	with open('/Users/Kvothe/Downloads/transparency_afff0345c6f99bf80eab5895458d8eab.pem') as f:
-		cert = f.read()
-
-	key = RSA.importKey(cert)
-	print(hex(key.n))
+	print(n)
 
 
 	
