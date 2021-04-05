@@ -1,6 +1,6 @@
 import requests
 import json
-
+url = 'http://aes.cryptohack.org/stream_consciousness/encrypt/'
 # a, b = ciphertext
 # c, d = plaintext
 def guess_and_check(a, b, c, d):
@@ -22,14 +22,30 @@ def guess_and_check(a, b, c, d):
 	print(plainhex)
 
 
+def step_0():
+	d = {}
+	for i in range(100):
+		if i%20 == 0: print(i)
+		r = requests.get(url)
+		j = json.loads(r.text)
+		c = j["ciphertext"]
+		if c not in d:
+			d[c] = 1
+	new_d = {}
+	for i in sorted(d, key=len):
+		new_d[i] = d[i]
 
+	print(new_d)
 
 
 def main():
+	STEP_0 = False
 	STEP_1 = True
 	STEP_2 = False # <-- step 2 turns out to be useless and it's faster to just examine the plaintext instead
 
-	url = 'http://aes.cryptohack.org/stream_consciousness/encrypt/'
+	if STEP_0:
+		step_0()
+
 	r = requests.get(url)
 	j = json.loads(r.text)
 
