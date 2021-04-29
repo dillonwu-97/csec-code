@@ -1,0 +1,7 @@
+display $rax
+display $rdx
+b *0x400add
+b *0x0000000000400ae0
+b *0x0000000000400a55
+display $rbp
+run
