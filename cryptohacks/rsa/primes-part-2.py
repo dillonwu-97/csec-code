@@ -1,4 +1,7 @@
 import gmpy2
+from Crypto.Util.number import long_to_bytes, isPrime
+from Crypto.PublicKey import RSA
+from Crypto.Cipher import PKCS1_OAEP
 
 def decrypt(e, phi, n, c):
 	d = gmpy2.invert(e, phi)
@@ -52,20 +55,50 @@ def marin_secrets():
 
 
 def fast_primes():
+	# solution is to use ROCA attack
 	'''
 	-----BEGIN PUBLIC KEY-----
 	MFswDQYJKoZIhvcNAQEBBQADSgAwRwJATKIe3jfj1qY7zuX5Eg0JifAUOq6RUwLz
 	Ruiru4QKcvtW0Uh1KMp1GVt4MmKDiQksTok/pKbJsBFCZugFsS3AjQIDAQAB
 	-----END PUBLIC KEY-----
 	'''
-	c= '249d72cd1d287b1a15a3881f2bff5788bc4bf62c789f2df44d88aae805b54c9a94b8944c0ba798f70062b66160fee312b98879f1dd5d17b33095feb3c5830d28'
+	ci= '249d72cd1d287b1a15a3881f2bff5788bc4bf62c789f2df44d88aae805b54c9a94b8944c0ba798f70062b66160fee312b98879f1dd5d17b33095feb3c5830d28'
 	m= '4ca21ede37e3d6a63bcee5f9120d0989f0143aae915302f346e8abbb840a72fb56d1487528ca75195b7832628389092c4e893fa4a6c9b0114266e805b12dc08d'
 	e= '10001'
+	public_key = RSA.importKey(open('/Users/exodia/Downloads/fastprimeskey.pem', 'r').read())
 
-	m = int(m,16)
-	e = int(e, 16)
-	c = int(c, 16)
-	print(m)
+	m = public_key.n
+
+	e = public_key.e
+	c = int(ci, 16)
+
+
+	# To install neca:
+	# git clone https://gitlab.com/jix/neca
+	# mkdir build
+	# cd build
+	# cmake ..
+	# Factorization found:
+	n = 51894141255108267693828471848483688186015845988173648228318286999011443419469 * 77342270837753916396402614215980760127245056504361515489809293852222206596161
+	p = 51894141255108267693828471848483688186015845988173648228318286999011443419469
+	q = 77342270837753916396402614215980760127245056504361515489809293852222206596161
+	assert(m == n)
+	print(e)
+	assert (p * q == m)
+	print(isPrime(p), isPrime(q))
+	phi = (p-1) * (q-1)
+	d = gmpy2.invert(e, phi)
+	key = RSA.construct((n, e, int(d)))
+	# print("key is: ", key)
+	# print(long_to_bytes(f))
+	cipher = PKCS1_OAEP.new(key)
+	# temp = cipher.encrypt('hi')
+	# print(temp)
+	plaintext = cipher.decrypt(bytes.fromhex(ci))
+	# return decrypt(e, phi, m, c)
+	return plaintext
+
+
 
 
 def main():
