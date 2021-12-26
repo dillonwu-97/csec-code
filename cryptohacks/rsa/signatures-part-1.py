@@ -24,49 +24,6 @@ def signing_server():
 	print(sig)
 	# Flag: crypto{d0n7_516n_ju57_4ny7h1n6}
 
-	
-
-# MSG = 'We are hyperreality and Jack and we own CryptoHack.org'
-# DIGEST = emsa_pkcs1_v15.encode(MSG.encode(), 256)
-# SIGNATURE = pow(bytes_to_long(DIGEST), D, N)
-
-
-# class Challenge():
-#     def __init__(self):
-#         self.before_input = "This server validates domain ownership with RSA signatures. Present your message and public key, and if the signature matches ours, you must own the domain.\n"
-
-#     def challenge(self, your_input):
-#         if not 'option' in your_input:
-#             return {"error": "You must send an option to this server"}
-
-#         elif your_input['option'] == 'get_signature':
-#             return {
-#                 "N": hex(N),
-#                 "e": hex(E),
-#                 "signature": hex(SIGNATURE)
-#             }
-
-#         elif your_input['option'] == 'verify':
-#             msg = your_input['msg']
-#             n = int(your_input['N'], 16)
-#             e = int(your_input['e'], 16)
-
-#             digest = emsa_pkcs1_v15.encode(msg.encode(), 256)
-#             calculated_digest = pow(SIGNATURE, e, n)
-
-#             if bytes_to_long(digest) == calculated_digest:
-#                 r = re.match(r'^I am Mallory.*own CryptoHack.org$', msg)
-#                 if r:
-#                     return {"msg": f"Congratulations, here's a secret: {FLAG}"}
-#                 else:
-#                     return {"msg": f"Ownership verified."}
-#             else:
-#                 return {"error": "Invalid signature"}
-
-#         else:
-#             return {"error": "Invalid option"}
-
-
 def lets_decrypt():
 
 	# I can control e and n in this code

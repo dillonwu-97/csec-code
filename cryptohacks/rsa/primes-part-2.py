@@ -2,6 +2,8 @@ import gmpy2
 from Crypto.Util.number import long_to_bytes, isPrime
 from Crypto.PublicKey import RSA
 from Crypto.Cipher import PKCS1_OAEP
+import os
+from math import gcd
 
 def decrypt(e, phi, n, c):
 	d = gmpy2.invert(e, phi)
@@ -99,12 +101,48 @@ def fast_primes():
 	return plaintext
 
 
+def ron_was_wrong():
+	# https://www.darkreading.com/risk/ron-was-wrong-whit-is-right-and-what-you-need-to-know
+	gmpy2.get_context().precision = 10000
+	DIRECTORY = '/Users/exodia/Downloads/keys_and_messages/'
+	N = [0]* 51
+	e = [0]* 51
+	c = [0]* 51
+	for file in os.listdir(DIRECTORY):
+		name = int(file.split(".")[0])
+		if file.endswith(".pem"):
+			f = open(DIRECTORY + file, 'rb')
+			key = RSA.importKey(f.read())
+			N[name] = key.n
+			e[name] = key.e
+		else:
+			f = open(DIRECTORY + file, 'r')
+			c[name] = int(f.read(),16)
 
+
+	found = 0
+	for i in range(51):
+		if i!= 0 and N[i] != N[21] and gcd(N[i], N[21]) != 1:
+			print(i)
+			found = i
+			break
+	p = gcd(N[found], N[21])
+	q = N[21] // p
+	print(p, q)
+	assert(p * q == N[21])
+	phi = (p-1) * (q-1)
+	d = gmpy2.invert(e[21], phi)
+	key = RSA.construct((N[21], e[21], int(d)))
+	cipher = PKCS1_OAEP.new(key)
+	plaintext = cipher.decrypt(bytes.fromhex(hex(c[21])[2:]))
+	print(plaintext)
+	# Flag: crypto{3ucl1d_w0uld_b3_pr0ud}
 
 def main():
 	# print("infinite descent sol: ", infinite_descent())
 	# print("marin_secrets sol: ", marin_secrets())
-	print("fast primes sol: ", fast_primes())
+	# print("fast primes sol: ", fast_primes())
+	print(ron_was_wrong())
 
 if __name__ == '__main__':
 	main()
