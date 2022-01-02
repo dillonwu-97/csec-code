@@ -1,0 +1,2 @@
+xxd bzImage.elf | grep 007e3d
+CTF{SB:575756}
