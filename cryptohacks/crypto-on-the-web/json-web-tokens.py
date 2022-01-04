@@ -3,6 +3,7 @@ import base64
 import requests
 import json
 from Crypto.PublicKey import RSA
+import urllib.parse
 
 def get_s(token):
 	t = token.split('.')
@@ -84,6 +85,28 @@ def rsa_or_hmac():
 	print(j)
 	# Flag: crypto{Doom_Principle_Strikes_Again}
 
+def json_in_json():
+	# {' \
+	# + '"admin": "' + "False" \
+	# + '", "username": "' + str(username) \
+	# + '"}'
+	# {"admin": False, "username": "    <user input start>    "}
+	# user input start should contain 
+	# user", "admin": True, "a":"b
+	url = 'http://web.cryptohack.org/json-in-json/'
+	create_session = 'create_session/'
+	authorize = 'authorise/'
+
+	# Quotes are not accepted for some reason
+	payload = '","admin":"True'
+	r = requests.get(url + create_session + payload + "/")
+	j = json.loads(r.text)
+	print(j["session"])
+
+	r = requests.get(url + authorize + j["session"] + "/")
+	j = json.loads(r.text)
+	print(j["response"])
+	# crypto{https://owasp.org/www-community/Injection_Theory}
 
 def main():
 	# token_appreciation()
@@ -95,7 +118,9 @@ def main():
 
 	# jwt_secrets()
 
-	rsa_or_hmac()
+	# rsa_or_hmac()
+
+	json_in_json()
 
 if __name__ == '__main__':
 	main()
