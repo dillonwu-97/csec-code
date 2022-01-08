@@ -6,6 +6,7 @@ PORT = 34499
 
 # Cannot for the life of me get the heapedit binary running locally so I'm just going to brute force this
 # Tried using pwninit to get the correct linker but to no avail
+# https://azeria-labs.com/heap-exploitation-part-2-glibc-heap-free-bins/
 def attack(address, value):
     r = remote(HOST, PORT)
     r.recvuntil(": ")
