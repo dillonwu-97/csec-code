@@ -1,0 +1,14 @@
+# https://seblau.github.io/posts/linux-anti-debugging
+
+ptrace is used for anti debugging purposes
+
+Comparison instruction offset: 0x001014f4 
+Instruction in the code: 0x5555555554f4
+
+Flag instruction offset:
+0x00101537
+Instruction I need to go to: 0x555555555525 // <-- need to go here first in order to set up the registers
+
+do this using set $pc=0x...
+
+Flag: HTB{y0u_trac3_m3_g00d!!!}
