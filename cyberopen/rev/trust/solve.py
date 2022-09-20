@@ -1,0 +1,19 @@
+def main():
+    print('hi')
+    a = [0x44, 0x33, 7, 0xd, 0x6d, 8, 0x16, 0x77, 0x41, 3, 99, 0x19, 0x36, 0x17, 0x58, 0x1d, 0x1c, 0x35, 3, 0x65, 0x1e, 0x23, 0xc, 0x6b, 0xb, 0x51, 0, 5, 7, 0x17, 0x65, 0x5c, 0x20]
+
+    s = "0ar89WxG5KRwQHlsXjmUAlbXTc4d0rToF"
+
+    assert(len(s) == len(a))
+
+    flag = ''
+    for i,v in enumerate(a):
+        temp = v ^ ord(s[i])
+        print(temp)
+        flag += chr(temp)
+    print(flag)
+
+    # tRu5T_n0tH1ng_4nD_n0_On3_24a7e13f
+
+if __name__ == '__main__':
+    main()
