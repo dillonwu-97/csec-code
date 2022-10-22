@@ -4,7 +4,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 ENV SHELL=bash
 
 RUN apt-get -y update && apt-get -y upgrade
-RUN apt-get install -y python git curl libglib2.0-0 libglib2.0-dev 
+RUN apt-get install -y python3 git curl libglib2.0-0 libglib2.0-dev 
 
 RUN useradd -m builder
 
