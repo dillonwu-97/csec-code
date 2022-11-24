@@ -1,0 +1,19 @@
+GET / HTTP/1.1
+Host: mercury.picoctf.net:1270
+Referer: mercury.picoctf.net:1270
+Origin: mercury.picoctf.net:1270
+User-Agent: picobrowser
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Connection: close
+Cookie: PHPSESSID=4viqpocn4tttsagpbunrtqbqnk
+Upgrade-Insecure-Requests: 1
+Date: November 11, 2018
+DNT: 1
+Accept-Language: sv
+X-Forwarded-For: 105.17.176.0
+
+
+picoCTF{http_h34d3rs_v3ry_c0Ol_much_w0w_f56f58a5}
+
