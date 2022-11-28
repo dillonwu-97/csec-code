@@ -1,0 +1,2 @@
+strstr is a substring check; just send rockpaperscissors to win 
+#Flag: picoCTF{50M3_3X7R3M3_1UCK_C85AF58A}
