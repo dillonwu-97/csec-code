@@ -111,7 +111,8 @@ def main():
     print(l)
     p.sendline(sh)
     p.interactive()
-    
+   
+    # Flag: picoCTF{th4t_w4s_fun_384f7c52706306d0}
 
 if __name__ == '__main__':
     main()
