@@ -1,0 +1,21 @@
+This challenge was from HTB University CTF 2021 Quals
+
+
+# Useful Resources:
+https://www.madebymikal.com/interpreting-whiteout-files-in-docker-image-layers/
+
+Not sure what I should be looking for in this image
+
+52f file seems to be the layer for establishing the directory structure 
+According to the other two layers, there seems to be something inside of the /usr/share folder
+I think the usr/share/lib/.wh..wh..opq indicates that /usr/lib was replaced meaning recovering it might be the way to get the flag
+Use the command tar -tf on the files
+
+
+# Flag:
+HTB{1_r3H
+4lly_l1kH
+3_st34mpH
+unk_r0b0H
+ts!!!}
+
