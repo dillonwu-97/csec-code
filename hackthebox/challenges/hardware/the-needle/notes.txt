@@ -1,0 +1,16 @@
+# TODO:
+
+Create a docker image and install firmadyne on it, and then extract the root file system onto that local machine
+
+Can use binwalk to extract the firmware.bin file 
+
+However, I was unable to get sasquatch running
+
+grep login to find username, and then grep sign to get password
+
+
+Important to note that in the extraction process, all of the files are not in the correct directory and everything basically got flattened
+
+Username: Device_Admin
+Password: qS6-X/n]u>fVfAt!
+Flag: HTB{4_hug3_blund3r_d289a1_!!}
