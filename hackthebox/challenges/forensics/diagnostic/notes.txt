@@ -1,0 +1,1 @@
+http://diagnostic.htb:31617/223_index_style_fancy.html!
