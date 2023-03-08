@@ -1,0 +1,4 @@
+The flag can be found by looking at .git
+git log and git checkout commands were used
+
+HTB{v3rsi0n_c0ntr0l_am_I_right?}
