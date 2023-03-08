@@ -1,0 +1,40 @@
+---
+title: brainy
+description: brainy
+tags: rsa, crypto, number theory
+---
+The brainy file contains code written in the language brainfuck. I used an online decoder and it gave me some rsa values including p,q,dp,dq, and the ciphertext.
+
+I tried to understand what dp and dq are used for, and it led me to the decryption of RSA using the Chinese remainder algorithm.
+<a href= "https://en.wikipedia.org/wiki/RSA_(cryptosystem)#Using_the_Chinese_remainder_algorithm">
+https://en.wikipedia.org/wiki/RSA_(cryptosystem)#Using_the_Chinese_remainder_algorithm </a>
+
+I programmmed the formulas and it gave me the flag. However, I have to revisit this problem because I don't really know how to formulas were derived. 
+
+```python
+import gmpy2
+def main():
+	p = 7901324502264899236349230781143813838831920474669364339844939631481665770635584819958931021644265960578585153616742963330195946431321644921572803658406281
+	q = 12802918451444044622583757703752066118180068668479378778928741088302355425977192996799623998720429594346778865275391307730988819243843851683079000293815051
+	dp = 5540655028622021934429306287937775291955623308965208384582009857376053583575510784169616065113641391169613969813652523507421157045377898542386933198269451
+	dq = 9066897320308834206952359399737747311983309062764178906269475847173966073567988170415839954996322314157438770225952491560052871464136163421892050057498651
+	c = 62078086677416686867183857957350338314446280912673392448065026850212685326551183962056495964579782325302082054393933682265772802750887293602432512967994805549965020916953644635965916607925335639027579187435180607475963322465417758959002385451863122106487834784688029167720175128082066670945625067803812970871
+	n = p * q
+
+	# Not entirely sure why this system of equations work
+	qinv = gmpy2.invert(p, q)
+	m1 = pow(c, dp, p)
+	m2 = pow(c, dq, q)
+	h = qinv * (m1-m2) % p
+	plaintext = (m2 + h * q) % n
+	
+    plaintext = str(hex(plaintext)[2:])
+	plaintext = bytes.fromhex(plaintext)
+	print(plaintext)
+
+if __name__ == '__main__':
+	main()
+```
+
+The flag is HTB{ch1n3z\_r3m4ind3r\_the0rem\_r0ck$$$\_9792}
+
