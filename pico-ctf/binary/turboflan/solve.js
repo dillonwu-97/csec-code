@@ -275,5 +275,5 @@ console.log(fo)
 console.log(ihex(addrof(fo)))
 */
 
-
+// Flag: picoCTF{Good_job!_Now_go_find_a_real_v8_cve!_af5019da9ba3419b}
 
