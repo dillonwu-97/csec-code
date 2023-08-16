@@ -103,7 +103,7 @@ def solve():
 
 def main():
     solve()
-    # Flag: 
+    # Flag: HTB{PRNGs,math,ECC_and_crypto_>_love._Love_is_pain}
 
 if __name__ == '__main__':
     main()
