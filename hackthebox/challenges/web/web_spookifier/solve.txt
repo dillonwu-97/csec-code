@@ -1,0 +1,6 @@
+HTB{t3mpl4t3_1nj3ct10n_C4n_3x1st5_4nywh343!!}
+
+${open("/flag.txt").read()}
+
+${} <-- whatever is inside the bracket executes python code
+
