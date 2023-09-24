@@ -17,7 +17,7 @@ console.log(weight)
  */
 
 
-// Flag: HTB{f33l1ng_4_l1ttl3_blu3_0r_m4yb3_p1nk?...you_n33d_to_b3h4v&#39;eval!!}
+// Flag: HTB{f33l1ng_4_l1ttl3_blu3_0r_m4yb3_p1nk?...you_n33d_to_b3h4v'eval!!}
 
 const hasPassed = ({ exam, paper, assignment }, formula) => {
 
