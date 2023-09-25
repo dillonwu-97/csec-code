@@ -1,0 +1,2 @@
+JBKEE62NIFXF6ODMOUZV6NZTMFGV6URQMNMH2IBA.txt <-- found in pcap
+decode base32 to HTB{MAn_8lu3_73aM_R0cX}  
