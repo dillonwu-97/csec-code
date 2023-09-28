@@ -1,0 +1,42 @@
+Resource:
+https://www.raspberrypi.com/documentation/computers/processors.html#bcm2837
+https://developer.arm.com/documentation/ddi0500/latest/
+https://www.raspberrypi.com/documentation/computers/raspberry-pi.html
+https://www.raspberrypi.com/documentation/computers/raspberry-pi.html#raspberry-pi-4-model-b
+
+
+Where are the other 20 pins from? jtag?
+https://developer.arm.com/documentation/101416/0100/Hardware-Description/Target-Interfaces/ARM-Standard-JTAG
+The jtag also has 20 pins, but most of them are ground whereas the ones in the diagram look like they are gpio
+Could be something like this? https://sysprogs.com/VisualKernel/tutorials/raspberry/jtagsetup/
+
+This looks similar; gpio extender? 
+https://www.cl.cam.ac.uk/projects/raspberrypi/tutorials/turing-machine/two.html
+So maybe it's some follower device, with the leader as the raspberry pi
+I think the extra 20 pins are from an i/o expander
+
+
+Tried: 
+power: P2, P4
+ground: P6
+uart txd: P8
+uart rxd: P10
+
+
+Alt5 might be a hint to something
+https://www.dummies.com/article/technology/computers/hardware/raspberry-pi/raspberry-pi-gpio-pin-alternate-functions-143761/
+It indicates that gpio is now 20 and 21?
+https://cs140e.sergio.bz/docs/BCM2837-ARM-Peripherals.pdf
+The data sheet shows that there are different places for different boot modes
+We have boot mode alt5 under alternative function assignment
+According to the documentation, GPIO40 -> TXD1, GPIO41 -> RXD1
+There are other options for alt5, but those pins are blanked out in the diagram. These options include GPIO32 -> TXD1, GPIO33 -> RXD1, 
+GPIO14 -> TXD1, GPIO15 -> RXD1
+TX (transmit) -> GPIO40 -> P31
+RX (receive) -> GPIO41 -> P33
+
+The tx/rx is correct, but the power is wrong.
+The voltage should be on the same line as the gpio pins, so it should be P29
+The ground should be on a different wire I think so P30
+Yes solution is
+P29, P30, P31, P33
