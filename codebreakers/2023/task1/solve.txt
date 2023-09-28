@@ -1,0 +1,14 @@
+# Need to find the data points in database.db that are within 10 minutes and within 1/100th of a degree
+# tables: 
+# timestamp: id, recTime, recDate
+# location: latitude, longitude, elevation
+# event: id, location_id, name, audio_object_id, timestamp_id
+# audio_object: id, transcript, contentUrl, description, name, encodingFormat
+# Retrieve the event id where timestamp is within 10 minutes from current timestamp
+#   and the geographic coordinates are within 1/100th of a degree
+# 
+# Getting the timestamp:
+# select * from timestamp where time(recTime) between time('22:36:23', '-10 minutes') and time('22:36:32', '+10 minutes') and recDate = '02/23/2023';
+# Getting the location
+# select * from location where abs(latitude - 29.21049) < 0.01 and abs(longitude + 85.79377) < 0.01;
+# Solution: 562, 782
