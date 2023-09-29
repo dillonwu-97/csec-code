@@ -53,5 +53,8 @@ Commands Reference Sheet:
 
 1) gdb-multiarch -ex "set architecture aarch64" -ex "target remote localhost:1234"
 2) sudo docker run -it --rm --device=/dev/net/tun:/dev/net/tun --cap-add NET_ADMIN -p 1234;1234 -v $(pwd)/myfiles:/myfiles cbc_qemu_aarch64:latest
+3) dtc -I dts -O dtb -o to_use.dtb output.dts
+4) dtc -I dtb -O dts -o output.dts input.dtb
+
 
 
