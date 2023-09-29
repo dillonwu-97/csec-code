@@ -1,0 +1,57 @@
+What is the docker image used for?
+Why is there an AES sbox and inverse sbox in the boot file?
+Do I need to extract these sboxes out?
+How do I build the docker image from each of the layers? 
+
+So I'm thinking i need to run the u-boot.bin image with qemu? But we could probably just run the image on our local system 
+instead of using Docker since it seems like Docker is just used to provide the qemu binary
+The command docker load < cbc_qemu_aarch64-image.tar builds a docker image
+I think this contains the kernel image? But not sure how to run it 
+It looks like image and source are basically the same files, but one of them is much faster to build (image is faster than source)
+
+The goal is to find the key that is used to encrypt the kernel. 
+
+distro_bootcmd=scsi_need_init=; setenv nvme_need_init; virtio_need_init=; for target in ${boot_targets}; do run bootcmd_${target}; done
+boot_targets=usb0 scsi0 virtio0 dhcp
+
+Which of these is kernel related? From using the corresponding info commands for each of these interfaces, 
+it doesnt seem like there is a device for any of them. 
+however, flashstart gives an address for the start of the nonvolatile memory region where important parts of the booting process
+is stored. one idea would be to attach gdb to the docker container on a different interface, and connect it to qemu. then i could
+debug the bootloader process to examine the code that is being executed by the bootloader. there should be instructions in the
+flashstart memory region. maybe the key used for the decryption step will be from there?
+ 
+Debugging (kind of) works?
+4 terminals
+1 runs the qemu command in the README.md file with a -s flag
+2 terminals are listeners
+1 terminal runs gdb with target localhost 1234
+
+sudo apt-get install gdb-multiarch
+gdb-multiarch -ex "set architecture aarch64" -ex "target remote localhost:1234"
+
+bdinfo gives some useful information like flashstart. 
+flashstart  = 0x0000000004000000
+flashsize   = 0x0000000002000000
+
+Using dtc to decompile the device tree blob would also be useful
+
+There are some protected sectors in flash memory. Maybe these protected sectors contains important information about the crypto
+key? 
+
+I think the way to solve this problem is to find a way to listen on uart1 since it's there. there must be some way to use it
+A potential idea might be to use wireshark to capture the traffic and examine the output? But there's no traffic on uart1.
+Maybe the second part is not uart and it's something else? 
+Another idea is that the there is an issue with the dtb file and that the uart mappings is incorrect, so that's why some information
+cannot be leaked by uart1
+
+Yea the solution was the remove all the "disabled" statuses in the decompiled dtb file. So the steps are to decompile the dtb file.
+Afterwards, modify the file to remove the status:"disabled" lines, and then recompile the file and execute the emulation command with
+the new dtb file. 
+
+Commands Reference Sheet:
+
+1) gdb-multiarch -ex "set architecture aarch64" -ex "target remote localhost:1234"
+2) sudo docker run -it --rm --device=/dev/net/tun:/dev/net/tun --cap-add NET_ADMIN -p 1234;1234 -v $(pwd)/myfiles:/myfiles cbc_qemu_aarch64:latest
+
+
