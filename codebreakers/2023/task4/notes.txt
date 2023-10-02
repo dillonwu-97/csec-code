@@ -1,0 +1,138 @@
+What is the point of the networking? Do I need it?
+How am I interfacing with the usb device?
+There is a qemu emulation that is created inside the docker container. This qemu emulation 
+runs on Linux overtlycra 5.10.92-v8+ #1514 SMP PREEMPT Mon Jan 17 17:39:38 GMT 2022 aarch64 GNU/Linux. 
+There is some usb device attached to this device. The container itself has the ip address 10.101.0.1
+The qemu emulation has the ip address 10.101.255.254
+So the container is the qemu host 
+And the emulation is the qemu guest
+
+Do I need to use the key from task3? 
+This looks interesting: cryptsetup: opening /opt/part.enc
+cryptsetup is probably what we are trying to reverse? No this is probably not the case
+cryptsetup is an open source tool so it probably isn't trivially exploitable
+But the goal is to find a password so how is the password related?
+
+We also have three devices. The encrypted file system is the sd card image maybe? the encrypted filesystem is on the usb and the kernel is responsible for providing
+the binary that connects to the usb i think
+is the .ssh file useful for anything?
+
+Maybe the kernel boot messages reveal something important about the encryption / decryption steps? this is also a reverse engineering challenge
+so I might be to extract some binary and then pop it into ghidra after actually building the image
+So i probably need to connect to ip address on the inside from the outside to get the important files i need to reverse engineer
+But this is also dynamic reverse engineering so maybe downloading out the binary is not needed?
+
+cryptsetup luksOpen /opt/part.enc temp <-- the command to submit the passphrase for the encrypted file
+Maybe next step would be to figure out how cryptsetup is used / how it work
+
+What are the files in dropbear used for? there are a lot of keys there
+/opt/mount_part is where the enc script is
+
+The /opt/mount_part section looks interesting 
+
+/opt/mount_part /dev/sda2 /private /opt/part.enc /agent
+
+drive to be mounted is sda2? 
+location to be mounted is /private
+encrypted partition is /opt/part.enc
+location of encrypted partition is agent 
+mount_part seems to give us the solution for the problem
+
+The hostname is: overtlycra
+brute force 3 characters
+
+I think the next thing I should try and do is download the encrypted luks file locally and try to brute force it on the native mac laptop instead of on
+the emulation which takes a long time
+
+
+Bruteforcing is taking too long even on a the vm. I don't think bruteforcing is the answer. Instead, i think we need to recover the corrupted data from 
+/dev/mmcblk0p1. Unfortunately, fsck is unable to recover the filesystem since fsck.vfag does not exist. So instead, I will be doing a binwalk through all
+of the images to see if I can extract the correct partition and recover locally? 
+Ideas I am considering are using binwalk to extract the data
+I can also try to compile the correct version of fsck with vfat and run that on the qemu guest device itself
+
+The id.txt file is located in the usb file, and when reading from the usb file, there is nothing to read thereby creating the problem. 
+
+I tried to fix the usb file with fsck.vfat but to no avail. I also tried rebuilding the image from the two ext files that were extracted from binwalk but that didnt
+work either. I will try to just boot the usb and debug that? Instead of booting the whole filesystem since the id.txt from the usb is the most important
+
+Maybe I have to do something with the networking instead? 
+Actually, I think the networking challenge is for task 5 instead of task 4 
+
+Ok review of what i've tried. 
+1) Bruteforcing luks but that takes too long.
+2) Tried fixing the filesystem with fsck.ext2 but that also doesn't work 
+
+Could it be related to the uuid? I forgot where I saw it though
+That would feel really guessy
+uuid is in the enc file: e6b66509-6ecc-4ded-8486-26836688b5c3
+
+
+qemu-system-aarch64 -drive if=none
+
+qemu-system-aarch64 -M raspi3b -m 1G -smp 4 -nographic 
+                    -append "rw earlyprintk loglevel=8 console=ttyAMA0,115200 dwc_otg.lpm_enable=0 root=/dev/mmcblk0p2 rootdelay=1" 
+                    -kernel $KERNEL -dtb $DTB 
+                    -drive if=sd,index=0,format=raw,file=$SD_IMG 
+                    -drive if=none,id=stick,format=raw,file=$USB_IMG 
+                    -device usb-storage,drive=stick 
+                    -netdev type=tap,id=usb0,script=/qemu-ifup,downscript=/qemu-ifdown 
+                    -device usb-net,netdev=usb0 
+                    -netdev type=tap,id=usb1,script=no,downscript=no 
+                    -device usb-net,netdev=usb1
+
+
+# Build container
+
+```
+sudo docker build -t cbc_qemu_aarch64:latest .
+```
+
+# Run container
+
+Put your files in a local directory named `myfiles`, or change the `-v` option to point to another directory in the command below.
+
+```
+sudo docker run -it --rm --device=/dev/net/tun:/dev/net/tun --cap-add NET_ADMIN -v $(pwd)/myfiles:/myfiles cbc_qemu_aarch64:latest
+```
+
+To get an extra shell in the running container, use `docker exec`:
+
+```
+sudo docker ps | grep cbc_qemu_aarch64:latest
+sudo docker exec -it <CONTAINER ID> /bin/bash
+```
+
+```
+
+## Task 4
+
+```
+export KERNEL=/myfiles/kernel8.img
+export DTB=/myfiles/bcm2710-rpi-3-b-plus.dtb
+export SD_IMG=/myfiles/sd.img
+export USB_IMG=/myfiles/usb.img
+
+qemu-system-aarch64 -M raspi3b -m 1G -smp 4 -nographic -append "rw earlyprintk loglevel=8 console=ttyAMA0,115200 dwc_otg.lpm_enable=0 root=/dev/mmcblk0p2 rootdelay=1" -kernel $KERNEL -dtb $DTB -drive if=sd,index=0,format=raw,file=$SD_IMG -drive if=none,id=stick,format=raw,file=$USB_IMG -device usb-storage,drive=stick -netdev type=tap,id=usb0,script=/qemu-ifup,downscript=/qemu-ifdown -device usb-net,netdev=usb0 -netdev type=tap,id=usb1,script=no,downscript=no -device usb-net,netdev=usb1
+```
+
+### Enable networking
+
+* The device internal IP is 10.101.255.254.
+* The QEMU host (running container) gets the IP 10.101.0.1.
+
+To enable NAT through the QEMU host, run within the running container:
+
+This command is basically saying for packets going out from 10.101.255.254, replace it with the ip of the interface it is exiting from 
+In our case for the two commands, it means that packets coming from 10.101.255.254 (the qemu guest / emulation) has its source ip address replaced
+with 10.101.0.1 (the qemu host / container)
+```
+iptables -t nat -I POSTROUTING -s 10.101.255.254 -j MASQUERADE
+```
+
+And add a default gateway in the QEMU guest:
+
+```
+ip route add gw via 10.101.0.1
+```
+
