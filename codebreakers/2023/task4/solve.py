@@ -2,6 +2,11 @@ from hashlib import sha1
 import subprocess
 import string
 # Getting the candidates for the id values
+'''
+To solve with dictionary file:
+Use the bruteforce-luks program found here: https://github.com/glv2/bruteforce-luks/tree/master/contrib/gentoo/app-crypt/bruteforce-luks
+bruteforce-luks -t 24 -f dic.txt  -v 30 myfiles/payload.enc
+'''
 
 def sandbox():
     teststr = 'overtlycraaaa'.encode()
