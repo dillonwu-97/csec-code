@@ -69,6 +69,7 @@ uuid is in the enc file: e6b66509-6ecc-4ded-8486-26836688b5c3
 
 Iterate through 0->f characters
 password is: overtlycra3a0
+hash is: 87679d282b7869b3900d61875d0123ad367936e8
 
 
 qemu-system-aarch64 -drive if=none
