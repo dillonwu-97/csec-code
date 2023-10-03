@@ -67,6 +67,9 @@ Could it be related to the uuid? I forgot where I saw it though
 That would feel really guessy
 uuid is in the enc file: e6b66509-6ecc-4ded-8486-26836688b5c3
 
+Iterate through 0->f characters
+password is: overtlycra3a0
+
 
 qemu-system-aarch64 -drive if=none
 
