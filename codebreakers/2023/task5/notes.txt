@@ -1,0 +1,197 @@
+In main.main in Binary ninja at memory location 00381264, there is a dropper/pkg/exfil.Connect function call
+According to the golang documentation, this is used to exfiltrate data using DNS queries
+the dropper is using the config file
+it calls readconfig() on the config file
+There is also a dropper.yaml file in the config folder but we dont have that
+There is also a /agent/hmac_key and a restart flag?
+
+What is diagclient?
+
+
+
+export KERNEL=/myfiles/kernel8.img
+export DTB=/myfiles/bcm2710-rpi-3-b-plus.dtb
+export SD_IMG=/myfiles/sd.img
+export USB_IMG=/myfiles/usb.img
+
+qemu-system-aarch64 -M raspi3b -m 1G -smp 4 -nographic -append "rw earlyprintk loglevel=8 console=ttyAMA0,115200 dwc_otg.lpm_enable=0 root=/dev/mmcblk0p2 rootdelay=1" -kernel $KERNEL -dtb $DTB -drive if=sd,index=0,format=raw,file=$SD_IMG -drive if=none,id=stick,format=raw,file=$USB_IMG -device usb-storage,drive=stick -netdev type=tap,id=usb0,script=/qemu-ifup,downscript=/qemu-ifdown -device usb-net,netdev=usb0 -netdev type=tap,id=usb1,script=no,downscript=no -device usb-net,netdev=usb1
+```
+
+### Enable networking
+
+* The device internal IP is 10.101.255.254.
+* The QEMU host (running container) gets the IP 10.101.0.1.
+
+To enable NAT through the QEMU host, run within the running container:
+
+This command is basically saying for packets going out from 10.101.255.254, replace it with the ip of the interface it is exiting from 
+In our case for the two commands, it means that packets coming from 10.101.255.254 (the qemu guest / emulation) has its source ip address replaced
+with 10.101.0.1 (the qemu host / container)
+```
+iptables -t nat -I POSTROUTING -s 10.101.255.254 -j MASQUERADE
+```
+
+And add a default gateway in the QEMU guest:
+
+```
+ip route add gw via 10.101.0.1
+```
+
+As expected, the networking stuff is used in task 5? 
+Although maybe it's actually used for task 6 and not task 5 for ssh connections
+If i can create a fake yaml file, and then capture with wireshark on the qemu interface, 
+I should be able to get back where the qemu container is trying to reach? 
+I might have to expose a port in the docker container in order for it to reach outside the contained network
+
+What does /bin/nav do?
+start invokes /bin/nav
+
+Do i expect the ip address to be hard coded somewhere or would it be loaded from a configuration file? 
+Maybe the ip address is located somewhere in memory connected to a list of other strings?
+
+diagclient stands for diagnostic client?
+the dropper reaches out to some ip address to download information probably?
+what is agent? related to ssh_agent or some random thing
+
+Description of start file:
+A restart file named agent_restart
+a process named agent
+There is some navigation service that is used but not sure to what end
+call agent/agent process with agent/config file in a loop
+
+Description of config file:
+Provides config details what else do you want
+
+sub_411f00 in agent binary uses an ssh ip address
+in the binja disassembly, there is a string that is
+
+5f746f6f726e6f6e -> _toornon
+resu_to
+nonroot_to_user?
+
+
+port 9000 is listening
+Could try to restart the container, check if port 9000 is listening
+Then, start the dropper services to see what happens
+
+Dropper creates a log file in /tmp/upload directory but idk why it does that or what the point is
+
+Ok so the usb contained the encrypted payload 
+Some password is used to decrypt the encrypted payload
+After the payload is decrypted, there are a couple of executables.
+How do each of them interact with each other and what is the function of each?
+The start program is executed
+The start program invokes agent with a config file
+it keeps doing this and makes sure that an agent_restart program exists
+The start program uses several important configurations located in the config file
+
+What is the story after the above steps?
+there is a listening port on 9000? 
+there is a collectors usb and ipc? What do these do
+There is a dropper executable and dropper directory
+there is also a yaml file that the dropper executable uses
+there is a key file and agent_restart file which is the restart flag
+So next step is to analyze the agent file to see what it does
+Going to push back finding the flag for now, and focus on what the goals of the programs are?
+Because i have a hunch that if i capture traffic on an interface, i will be able to identify what the ip address should be 
+
+
+start function calls diagclient which is diagnostic client?
+Then after calling diagclient, 
+The server address is located somewhere after the memory location of important_var
+diag_client is called by the agent program. if everything is ok, then we continue
+Not sure what calls important_function though
+diag_client seems to be making ipc calls to some remote server so it's looking for things to do?
+It could also be that we are just transmitting our ip address to the server, and the server ip is hardcoded somewhere?
+
+Why is the dropper interacting with the mongo database?
+
+Slowly making my way through idea 3
+When using a yaml file with the line: 
+    mongodb://admin:admin@localhost:27017/
+I get the error: 
+    yaml: unmarshal errors:
+      line 1: cannot unmarshal !!str `mongodb...` into config.Config
+What does the config.Config object look like?
+Seems like uri is getting parsed and then a config structure is getting built
+https://dev.to/ilyakaznacheev/a-clean-way-to-pass-configs-in-a-go-application-1g64
+Similar to something shown above?
+
+
+type:.eq.struct { Database string "yaml:\"database\", envconfig:\"DB_DATABASE\""; Collection string "yaml:\"collection\", envconfig:\"DB_COLLECTION\""; ClientKey string "yaml:\"clientkey\", envconfig:\"DB_CLIENT_KEY\""; ClientCert string "yaml:\"clientcert\", envconfig:\"DB_CLIENT_CERT\""; CACert string "yaml:\"cacert\", envconfig:\"DB_CA_CERT\""; URL string "yaml:\"url\", envconfig:\"DB_URL\"" }
+Dummy values for the yaml file: 
+Database:    "db"
+Collection:  "users"
+ClientKey:   "12345678-abcd-efgh-ijkl-9876543210ab"
+ClientCert:  "/path/to/client/cert.pem"
+CACert:      "/path/to/ca/cert.pem"
+URL:         "mongodb://admin:admin@localhost:27017/"
+
+
+Found this in the disassembly
+
+Ideas to try:
+1) Use wireshark to capture on an interface connected to the qemu guest device
+    Steps to do this:
+        1) port forward in docker container
+        
+    But even if it does reach out to a specific ip address, it would need to be located in the binary or in the qemu emulation somewhere
+    Additionally, can I just run the agent file and it does a ping, or does the yaml file also need to be correct?
+    I can try without a yaml file first, and then if it doesn't work, work on guessing the yaml file
+2) Find the ip address hidden in the binary since it's also a forensics challenge
+3) Follow the trail of debug messages from the .yaml file to try and construct a solution?
+
+
+
+Command sent: rm dropper.yaml.bz2 && bzip2 -k dropper.yaml && ./dropper dropper.yaml.
+ip address: 100.102.92.99
+Error messages: 
+
+/agent # rm dropper.yaml.bz2 && bzip2 -k dropper.yaml && ./dropper dropper.yaml.
+bz2
+1970/01/01 00:28:32 Connecting to server...
+1970/01/01 00:28:32 Failed to connect to MongoDB:error parsing uri: scheme must be "mongodb" or "mongodb+srv"
+/agent # rm dropper.yaml.bz2 && bzip2 -k dropper.yaml && ./dropper dropper.yaml
+yaml: input error: bzip2 data invalid: bad magic value
+/agent # rm dropper.yaml.bz2 && bzip2 -k dropper.yaml && ./dropper dropper.yaml.
+bz2
+1970/01/01 00:28:45 Connecting to server...
+1970/01/01 00:28:45 Failed to connect to MongoDB:error parsing uri: scheme must be "mongodb" or "mongodb+srv"
+/agent # vi dropper.yaml
+/agent # rm dropper.yaml.bz2 && bzip2 -k dropper.yaml && ./dropper dropper.yaml.
+bz2
+1970/01/01 00:29:22 Connecting to server...
+1970/01/01 00:29:22 Failed to connect to MongoDB:error parsing uri: scheme must be "mongodb" or "mongodb+srv"
+/agent # rm dropper.yaml.bz2 && bzip2 -k dropper.yaml && ./dropper dropper.yaml.
+bz2
+1970/01/01 00:29:31 Connecting to server...
+1970/01/01 00:29:31 Failed to connect to MongoDB:error parsing uri: scheme must be "mongodb" or "mongodb+srv"
+/agent # rm dropper.yaml.bz2 && bzip2 -k dropper.yaml && ./dropper dropper.yaml.
+bz2
+1970/01/01 00:30:53 Connecting to server...
+1970/01/01 00:30:53 Failed to connect to MongoDB:error parsing uri: scheme must be "mongodb" or "mongodb+srv"
+/agent # rm dropper.yaml.bz2 && bzip2 -k dropper.yaml && ./dropper dropper.yaml.
+bz2
+1970/01/01 00:31:07 Connecting to server...
+1970/01/01 00:31:07 Failed to connect to MongoDB:error parsing uri: scheme must be "mongodb" or "mongodb+srv"
+/agent # rm dropper.yaml.bz2 && bzip2 -k dropper.yaml && ./dropper dropper.yaml.
+bz2
+1970/01/01 00:31:15 Connecting to server...
+1970/01/01 00:31:15 Failed to connect to MongoDB:error parsing uri: scheme must be "mongodb" or "mongodb+srv"
+/agent # rm dropper.yaml.bz2 && bzip2 -k dropper.yaml && ./dropper dropper.yaml.
+bz2
+1970/01/01 00:31:26 Connecting to server...
+1970/01/01 00:31:26 Failed to connect to MongoDB:error parsing uri: scheme must be "mongodb" or "mongodb+srv"
+/agent # vi dropper.yaml
+/agent # rm dropper.yaml.bz2 && bzip2 -k dropper.yaml && ./dropper dropper.yaml.
+bz2
+1970/01/01 00:32:35 Connecting to server...
+1970/01/01 00:32:35 Failed to connect to MongoDB:error parsing uri: scheme must be "mongodb" or "mongodb+srv"
+/agent # rm dropper.yaml.bz2 && bzip2 -k dropper.yaml && ./dropper dropper.yaml.
+1970/01/01 00:32:53 Connecting to server...
+1970/01/01 00:32:53 ...Connected!
+1970/01/01 00:32:53 Loading/tmp/upload
+1970/01/01 00:32:53 Processing/tmp/upload/boot_log_1970-01-01T00:06:32+00:00boot_log_1970-01-01T00:06:32+00:00
+1970/01/01 00:33:23 Failed to insert into MongoDB:server selection error: server selection timeout, current topology: { Type: Unknown, Servers: [{ Addr: 100.102.92.99:27017, Type: Unknown, Last error: dial tcp 100.102.92.99:27017: connect: network is unreachable }, ] }
+1970/01/01 00:33:23 Processing/tmp/upload/boot_log_1970-01-01T00:07:47+00:00boot_log_1970-01-01T00:07:47+00:00
+1970/01/01 00:33:54 Failed to insert into MongoDB:server selection error: server selection timeout, current topology: { Type: Unknown, Servers: [{ Addr: 100.102.92.99:27017, Type: Unknown, Last error: dial tcp 100.102.92.99:27017: connect: network is unreachable }, ] }
