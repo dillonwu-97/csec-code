@@ -1,0 +1,9 @@
+Use apktool and jadx-gui in order to decompile the binary
+Afterwards, modify to nez and patch the program using the command apktool b . -o new_apk.apk
+
+
+keytool -genkey -v -keystore apkrypt.keystore -alias apkrypt_key -keyalg RSA -keysize 2049 -validity 365
+jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore apkrypt.keystore new_apk.apk apkrypt_key
+
+the first is to generate a certificate, and the second is to sign the apk with the certificate
+HTB{3nj0y_y0ur_v1p_subscr1pt1on}
