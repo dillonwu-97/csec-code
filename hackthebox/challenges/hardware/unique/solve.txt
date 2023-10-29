@@ -1,0 +1,5 @@
+HTB{v1n_c42_h4ck1n9_15_1337!*0^}
+
+This is an excellent writeup on the CAN protocol, which is used for car exploitation
+https://medium.com/@yogeshojha/car-hacking-101-practical-guide-to-exploiting-can-bus-using-instrument-cluster-simulator-part-i-cd88d3eb4a53
+We open up the file in Logic2, and have to find the CAN interface. Then, mess around with the bit rate. When it's set to 125000 bits/s, the flag can be found in the data in plaintext
