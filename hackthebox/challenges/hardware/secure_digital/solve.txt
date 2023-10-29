@@ -1,0 +1,4 @@
+\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFEHTB{unp2073c73d_532141_p2070c015_0n_53cu23_d3v1c35}\r\nHTB{unp20
+HTB{unp2073c73d_532141_p2070c015_0n_53cu23_d3v1c35}
+Saw the microsd cards use spi to transmit data, so I used that analyzer option, and then set the correct channels. Afterwards, I used the search option to find the flag.
+
