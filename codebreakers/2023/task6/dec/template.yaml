@@ -1,0 +1,10 @@
+host: "your-mongodb-host.example.com"
+port: 27017
+database: "hello"
+  collection: "your-collection-name"
+  username: "user"
+  password: "pass"
+  clientkey: "/path/to/client/key"
+  clientcert: "/path/to/client/cert"
+  cacert: "/path/to/ca/cert"
+  url: "mongodb://your-mongodb-host.example.com:27017"
