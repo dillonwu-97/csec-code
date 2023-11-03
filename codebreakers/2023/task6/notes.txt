@@ -1,0 +1,35 @@
+database ip: 100.102.92.99:27017
+jumpbox ip: 100.127.0.2
+
+First thing to do is figure out how to connect to mongodb
+Do i need to connect to the jumpbox using the qemu guest device or can i just connect to it from my native device?
+i should be able to just connect to it from my native device
+Is there a way to monitor the traffic on the jumpbox device? What exactly would I be looking out for?
+
+
+The ssh tunneling command: 
+ssh -i jumpbox.key -L 9999:100.102.92.99:27017 user@external-support.bluehorizonmobile.com -p 22
+
+Connect with:
+mongosh mongodb://localhost:9999
+
+I think that I have to use the dropbox binary and understand more deeply what it does in relation to the mongodb stuff
+Since i'm trying to plant something, it probably is the case that I need to connect to the database through the emulation?
+Because the dropper is doing something to the database and i need to figure out what it is
+Then there is the matter of uncovering the information I actually need to extract
+
+
+There is some server that we need to recover the ip address for. now that I have a tunnel, I can do some recon but I keep getting the message "command <> requires authentication". Maybe the dropper which creates a listener on our qemu guest device on port 9000 waits for some outbound connection to mongodb and checks something (what could this something be?). then if it sees this something, the server sends a payload to the qemu guest device. And if I have wireshark listening on port 9000, I can find the server address.
+
+Maybe i can start a mongodb locally and just mess around with it
+This would include:
+1) enable auth
+2) creating a database and a table?
+3) Trying to insert random data into it to see if data can get inserted
+
+This is a good way to mess around with mongodb
+https://github.com/nixawk/pentest-wiki/blob/master/2.Vulnerability-Assessment/Database-Assessment/mongodb/mongodb_hacking.md
+another idea is to bruteforce?
+
+
+If I remember, I think data was being pulled from the tmp directory to achieve some end 
