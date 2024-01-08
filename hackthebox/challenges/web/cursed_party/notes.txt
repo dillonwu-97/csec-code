@@ -1,0 +1,8 @@
+XSS problem
+
+- Need to create a webhook endpoint
+- Need to get the admin to send the token somewhere
+- Bot is responsible for submitting something to an endpoint
+- The CDN that is listed as a valid source for scripts allows github so we can upload a script to github, and then load the script from github
+- The script executes and then it can send the token to the webhook endpoint
+- 
