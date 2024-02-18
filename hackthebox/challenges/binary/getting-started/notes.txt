@@ -1,0 +1,2 @@
+easy buffer overflow
+flag: HTB{b0f_tut0r14l5_4r3_g00d}
