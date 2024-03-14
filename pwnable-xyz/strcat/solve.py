@@ -28,4 +28,3 @@ r.sendafter(": ", p64(win))
 
 r.interactive()
 # FLAG{if_u_used_the_fsb_u_failed}
-
