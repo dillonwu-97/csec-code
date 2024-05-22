@@ -1,0 +1,192 @@
+
+Notes:
+
+struct looks like something this:
+struct {
+    i64 a <-- an index or something?
+    i64 b <-- crete block goes here
+    i32 c.1 
+    i32 c.2 <-- log_idx + 0x14 
+    i64 d <-- log_idx + 0x18, inspect flag 
+
+}
+- no _malloc_hook / _free_hook
+- it seems like everything can only be used once? 
+- create log 
+    create log only works once 
+- insert log
+    insert log is responsible for allowing you to add something to the device?
+    it looks like this number can be very large so it might be dangerous 
+- delete log not implemented
+    no free?
+- edit log
+    - i guess edit() allows for arbwrite
+- inspect; i'm confused does inspect allow arbread?
+    - i think it does allow for arbread
+
+Okay allocating a very large chunk causes mmap to be used, which allows us to create a very large chunk for libc
+
+Questions:
+does a overwrite b? in the create() function?
+
+Notes:
+This is a very good blog post
+https://faraz.faith/2020-10-13-FSOP-lazynote/
+
+
+TODO
+- [ ] Research how _malloc / _free hook is dealt with  
+    - Found a writeup for this 
+- [ ] Need to figure out where the leak is initially
+    - 
+
+we have contiguous memory here 
+216 byte, which is the size of a FILE struct
+
+0x7fc27efb0680 <_IO_2_1_stderr_>:	0x00000000fbad2087	0x00007fc27efb0703
+0x7fc27efb0690 <_IO_2_1_stderr_+16>:	0x00007fc27efb0703	0x00007fc27efb0703
+0x7fc27efb06a0 <_IO_2_1_stderr_+32>:	0x00007fc27efb0703	0x00007fc27efb0703
+0x7fc27efb06b0 <_IO_2_1_stderr_+48>:	0x00007fc27efb0703	0x00007fc27efb0703
+0x7fc27efb06c0 <_IO_2_1_stderr_+64>:	0x00007fc27efb0704	0x0000000000000000
+0x7fc27efb06d0 <_IO_2_1_stderr_+80>:	0x0000000000000000	0x0000000000000000
+0x7fc27efb06e0 <_IO_2_1_stderr_+96>:	0x0000000000000000	0x00007fc27efb0760
+0x7fc27efb06f0 <_IO_2_1_stderr_+112>:	0x0000000000000002	0xffffffffffffffff
+0x7fc27efb0700 <_IO_2_1_stderr_+128>:	0x0000000000000000	0x00007fc27efb2720
+0x7fc27efb0710 <_IO_2_1_stderr_+144>:	0xffffffffffffffff	0x0000000000000000
+0x7fc27efb0720 <_IO_2_1_stderr_+160>:	0x00007fc27efaf880	0x0000000000000000
+0x7fc27efb0730 <_IO_2_1_stderr_+176>:	0x0000000000000000	0x0000000000000000
+0x7fc27efb0740 <_IO_2_1_stderr_+192>:	0x0000000000000000	0x0000000000000000
+0x7fc27efb0750 <_IO_2_1_stderr_+208>:	0x0000000000000000	0x00007fc27efb1560
+
+0x7fc27efb0760 <_IO_2_1_stdout_>:	0x00000000fbad2887	0x00007fc27efb07e3
+0x7fc27efb0770 <_IO_2_1_stdout_+16>:	0x00007fc27efb07e3	0x00007fc27efb07e3
+0x7fc27efb0780 <_IO_2_1_stdout_+32>:	0x00007fc27efb07e3	0x00007fc27efb07e3
+0x7fc27efb0790 <_IO_2_1_stdout_+48>:	0x00007fc27efb07e3	0x00007fc27efb07e3
+0x7fc27efb07a0 <_IO_2_1_stdout_+64>:	0x00007fc27efb07e4	0x0000000000000000
+0x7fc27efb07b0 <_IO_2_1_stdout_+80>:	0x0000000000000000	0x0000000000000000
+0x7fc27efb07c0 <_IO_2_1_stdout_+96>:	0x0000000000000000	0x00007fc27efafa80
+0x7fc27efb07d0 <_IO_2_1_stdout_+112>:	0x0000000000000001	0xffffffffffffffff
+0x7fc27efb07e0 <_IO_2_1_stdout_+128>:	0x000000000a000000	0x00007fc27efb2730
+0x7fc27efb07f0 <_IO_2_1_stdout_+144>:	0xffffffffffffffff	0x0000000000000000
+0x7fc27efb0800 <_IO_2_1_stdout_+160>:	0x00007fc27efaf980	0x0000000000000000
+
+__finish can be overwritten maybe?
+So there is a vtable at the end of the struct that we can overwrite 
+But we cannot overwrite the vtable itself to point to writable memory since that's not allowed?
+There is a check.
+It checks that the vtable address resides in the __libc_IO_vtables section 
+
+Can i just overwrite the vtable that it is in to a onegadget?
+
+
+IO_wfile_overflow -> do_allocbuf
+file->wide_data
+wide_data is used to handle wide characters (multi byte) 
+
+i think we have to make 
+- do_lock > 1
+- fp->_mode = 0
+- fp->_IO_write_ptr = 1
+- fp->_IO_write_base = 0
+- then we can hit overflow (fp, EOF) where EOF = -1 
+
+struct looks like what?
+
+
+
+$2 = {
+  file = {
+    _flags = -72540025,
+    _IO_read_ptr = 0x7ff08671d703 <_IO_2_1_stderr_+131> "",
+    _IO_read_end = 0x7ff08671d703 <_IO_2_1_stderr_+131> "",
+    _IO_read_base = 0x7ff08671d703 <_IO_2_1_stderr_+131> "",
+    _IO_write_base = 0x7ff08671d703 <_IO_2_1_stderr_+131> "",
+    _IO_write_ptr = 0x7ff08671d703 <_IO_2_1_stderr_+131> "",
+    _IO_write_end = 0x7ff08671d703 <_IO_2_1_stderr_+131> "",
+    _IO_buf_base = 0x7ff08671d703 <_IO_2_1_stderr_+131> "",
+    _IO_buf_end = 0x7ff08671d704 <_IO_2_1_stderr_+132> "",
+    _IO_save_base = 0x0,
+    _IO_backup_base = 0x0,
+    _IO_save_end = 0x0,
+    _markers = 0x0,
+    _chain = 0x7ff08671d760 <_IO_2_1_stdout_>,
+    _fileno = 2,
+    _flags2 = 0,
+    _old_offset = -1,
+    _cur_column = 0,
+    _vtable_offset = 0 '\000',
+    _shortbuf = "",
+    _lock = 0x7ff08671f720 <_IO_stdfile_2_lock>,
+    _offset = -1,
+    _codecvt = 0x0,
+    _wide_data = 0x7ff08671c880 <_IO_wide_data_2>,
+    _freeres_list = 0x0,
+    _freeres_buf = 0x0,
+    __pad5 = 0,
+    _mode = 0,
+    _unused2 = '\000' <repeats 19 times>
+  },
+  vtable = 0x7ff08671e560 <__GI__IO_file_jumps>
+}
+
+
+
+i guess the only check that happens is for the vtable value and nothing else 
+
+
+
+'''
+File system oriented programming.
+This is a technique used for heap exploitation post _malloc_hook removal
+The first thing to know are the fields of the struct.
+struct _IO_FILE_plus looks like this:
+
+FILE file 
+const struct _IO_jump_t* vtable
+
+A FILE struct is typedef-ed as an _IO_FILE here: 
+https://sourceware.org/git/?p=glibc.git;a=blob;f=libio/stdio.h;h=754301fc1abd789700a723fa399fecd3f931dfa2;hb=HEAD
+An _IO_FILE is defined here:
+https://codebrowser.dev/glibc/glibc/libio/bits/types/struct_FILE.h.html
+
+What is an _IO_marker?
+https://elixir.bootlin.com/glibc/glibc-2.23/source/libio/libio.h#L156
+An _IO_marker is used to remember the position in a buffer.
+
+What is _IO_chain?
+_IO_Chain is more important; it is responsible for connecting a list of _IO_FILE struct.
+
+What is _IO_lock_t?
+What is _IO_codecvt?
+What is _IO_wide_data?
+_IO_wide_data is used to handle special encodings like UTF-16 and UTF-32 encodings.
+
+There is an _IO_jump_t vtable struct which is a jump table.
+https://elixir.bootlin.com/glibc/glibc-2.39/source/libio/libioP.h
+Used by GNU C glibc I/O system 
+
+JUMP_FIELD 
+
+
+_IO_list_all is an internal global variable that keeps track of all open FILE streams.
+So we have an idea of where _IO_list_all is, and then we can modify the vtable entry?
+
+
+https://www.gnu.org/software/libc/manual/html_node/Streams.html#index-FILE
+
+When a file stream's buffer is flushed, __overflow() gets called. 
+When exit() is called, all buffers need to be flushed for cleanup.
+Do other pointers work as well? 
+Like finish
+
+'''
+
+
+
+
+
+
+
+
+
+
