@@ -1,0 +1,2 @@
+target remote :1234
+symbol-file ./exploit-fs/exploit
