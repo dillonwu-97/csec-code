@@ -1,5 +1,6 @@
 import base64
 from Crypto.Cipher import ChaCha20_Poly1305
+import pgpy
 
 
 b64_str = 'cQoFRQErX1YAVw1zVQdFUSxfAQNRBXUNAxBSe15QCVRVJ1pQEwd/WFBUAlElCFBFUnlaB1ULByRdBEFdfVtWVA=='
@@ -56,8 +57,11 @@ def reverse_the_enc():
     ret = b''
     for i in range(len(bites)):
         temp = bites[i] ^ ord(xor_str[i % len(xor_str)])
+        assert temp < 256
         ret += temp.to_bytes(1, byteorder='little')
-    print(base64.b64encode(ret[:32]))
+    """ print("val: ", ret.hex()) """
+    """ print(base64.b64encode(ret[:32])) """
+    """ print(ret[:32].hex()) """
     return ret
 
 def check(to_check):
@@ -91,14 +95,50 @@ def decrypt(val, enc):
     f = open('./temp', 'wb')
     f.write(dec)
     f.close()
-    
+
+def another_dec(key, val):
+    dec = b''
+    assert len(key) == 64
+    for i in range(len(val)):
+        """ temp = val[i] ^ ord(xor_str[i % 11]) """
+        temp = val[i] ^ key[i % len(key)]
+        dec += temp.to_bytes(1, byteorder='little')
+
+    f = open('./temp', 'wb')
+    f.write(dec)
+    f.close()
+
+def handle_pgp():
+    s = open('./pgpkey', 'rb')
+    sec_key, _ = pgpy.PGPKey.from_blob(s)
+    print(sec_key)
+ 
+def sandbox():
+    """ get_nonce_and_key() """
+    key = reverse_the_enc()
+    print(key)
+    enc = get_enc_file()
+    """ decrypt(key, enc) """
+    another_dec(key, enc)
+    """ handle_pgp() """
+
     
 def main():
-    get_nonce_and_key()
-    key = reverse_the_enc()
+
+    # sandbox testing
+    """ sandbox() """
+
+    print("base64 decoded: ", base64.b64decode(b64_str)) # length = 64
+    print("decoded base64 flag with xor key: ", reverse_the_enc().decode()) # this is a hash
+    hash_bytes = bytes.fromhex(reverse_the_enc().decode())
+    assert len(hash_bytes) == 0x20
+    print("hash bytes: ", hash_bytes, len(hash_bytes))
     enc = get_enc_file()
-    decrypt(key, enc)
-    print("key: ", key)
+    decrypt(hash_bytes, enc)
+
+
+
+
 
 if __name__ == '__main__':
     main()
