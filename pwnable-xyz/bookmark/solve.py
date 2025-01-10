@@ -34,7 +34,7 @@ r.sendlineafter('> ', '4')
 
 r.interactive()
 
-
+# flag; FLAG{l0gic_error_ch3cked}
 
 
 '''
