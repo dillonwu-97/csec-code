@@ -90,13 +90,33 @@ we calculate the prev chunk location using the offset once it checks that the bi
 it checks the footer information i guess which makes sense
 so an additional step is to modify the footer block as well
 but then we encounter a similar problem again where the last two bytes will have to be some value that cannot be converted to zero?
+because we are not using a positive value, we're actually using a negative value so it's fine 
+ok but still confusing because the prev chunk is calculated from a positive value usually?
+so b - 0x500 = a
+well the stack is higher memory so it's fine because b - (negative number) = stack 
+
+not sure if there is an off by one error here somewhere
 
 
+house of force mitigations in glibc malloc 2.29 
+where was the house of force mitigation patch?
+what does it prevent?
+before and after of each defensive tool 
+we can try to modify the code so that the next chunk returned is the return address and build the rop chain in that way, so we probs need to alloc bytes in such a way that we get into the return address 
 
+so the goal is to figure out some way to write into the stack past the canary or build an arbitrary write primitive
+we can read out the canary if we make the value we are trying to write small enough i think? 
+so if we can modify height and width after first setting them to be small, we can read the canary 
+but then we still can't write data without clobbering the stack 
+can we build a write primitive from this? 
 
-
-
-
+1. allocate a chunk that is small 
+2. overwrite the height and width to be big 
+    <-- how far away is the stack?
+    0x40 bytes
+3. write data into the return address past the canary one line at a time and modify the last 0xa byte again while preserving the 0's 
+4. find the gadgets we need to return to libc 
+    <- use libc for gadgets instead because no gadgets in the binary
 
 
 
