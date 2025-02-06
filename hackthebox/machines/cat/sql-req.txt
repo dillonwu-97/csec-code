@@ -1,0 +1,16 @@
+POST /accept_cat.php HTTP/1.1
+Host: cat.htb
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:128.0) Gecko/20100101 Firefox/128.0
+Accept: */*
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate, br
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 20
+Origin: http://cat.htb
+Connection: keep-alive
+Referer: http://cat.htb/admin.php
+Cookie: PHPSESSID=1t27rvt101q36p3ilq3kv2k2tc
+Priority: u=0
+
+catName=asdf&catId=1
+
