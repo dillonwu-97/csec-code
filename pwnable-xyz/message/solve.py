@@ -27,7 +27,6 @@ def solve():
     # read 0x58 -> 0x60
 
     def leak_rip():
-
         leak = ''
         for i in range(0x8, 0x8+0x6):
             pos = i + 0x12 + 0x30
