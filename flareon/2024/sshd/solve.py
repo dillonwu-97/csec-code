@@ -1,8 +1,12 @@
 from pwn import *
 
 
+
+def reverse_sc():
+    pass
+
 def main():
-    path = './rfs/usr/lib/x86_64-linux-gnu/liblzma.so.5.4.1'
+    path = './liblzma.so.5.4.1'
     f = open(path, 'rb')
     b = f.read()
     start = 0x00023960
