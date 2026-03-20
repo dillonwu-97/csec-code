@@ -1,0 +1,18 @@
+need zlib decompress
+run os decrypt to replace file 
+reread file and extract up to endstream
+dec:  789c012000dfff3fc2711b952feea8d81d37c6d4d2a4697f9ae5cb701af4cc86305bb068
+c5bd081b891153
+dump:  3fc2711b952feea8d81d37c6d4d2a4697f9ae5cb701af4cc86305bb068c5bd08
+dec:  789c012000dfff3fc2711b952feea8d81d37c6d4d2a4697f9ae5cb701af4cc86305bb068
+c5bd081b891153
+dump:  3fc2711b952feea8d81d37c6d4d2a4697f9ae5cb701af4cc86305bb068c5bd08
+
+dec:  789c3b7c3d7e4987feceb2608e47f652f7df6fcedae225285274d489a38e63e3aecd2772
+0007130f81
+dump:  c3d75fa4882fb9765308e23f1adfefb36ab44a111472c542087e08b1bab3c86c
+
+dec:  789c5bd8b95effd5f76d4fcba37bb3ffa7a8eccddae225285274d489a38e63e3aecd277
+dump:  a189af2feaf7b6e5775b8d6bff6424bd6ab44a111472c542087e08b1bab3c86c
+
+Puzzl1ng-D3vilish-F0rmat@flare-on.com
